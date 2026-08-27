@@ -36,6 +36,13 @@ jobs:
           npm run build
           node ./node_modules/@capacitor/cli/bin/capacitor sync android
 
+      - name: Ensure Debug Keystore Exists
+        run: |
+          if [ ! -f android/app/debug.keystore ]; then
+            echo "Generating debug.keystore..."
+            keytool -genkey -v -keystore android/app/debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+          fi
+
       - name: Make Gradlew Executable
         run: chmod +x android/gradlew
 
