@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1027179208222",
+    "project_id": "laborbook-4c47e",
+    "storage_bucket": "laborbook-4c47e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1027179208222:android:ac3483799fc5ed6c6a580f",
+        "android_client_info": {
+          "package_name": "com.labourbook.app",
+          "certificate_hash": "1aee0c2e3064795bdb6d7b7d30efb623bee553c7"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1027179208222-2hhdrgohaaa7ed068smm0tekptejq4k8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMeOVp4gfkmBrOv_uMfOUuokXHQLFwFZY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1027179208222-2hhdrgohaaa7ed068smm0tekptejq4k8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
