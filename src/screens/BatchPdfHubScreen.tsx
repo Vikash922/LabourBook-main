@@ -71,7 +71,7 @@ export const BatchPdfHubScreen: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] pb-28 pt-1 px-3 sm:px-4 max-w-3xl mx-auto space-y-4">
+    <div className="min-h-screen bg-[#F8FAFC] pb-28 pt-[calc(0.75rem+env(safe-area-inset-top,0px))] px-3 sm:px-4 max-w-3xl mx-auto space-y-4">
       {/* 1. Header with Back Button */}
       <div className="bg-white rounded-2xl border border-slate-200/80 shadow-2xs p-3.5 flex items-center justify-between">
         <div className="flex items-center gap-3">

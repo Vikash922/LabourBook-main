@@ -122,7 +122,7 @@ _Generated via Laborbook App_`;
   return (
     <div className="min-h-screen bg-white pb-32 selection:bg-[#1862D6] selection:text-white">
       {/* 1. Top Header Bar Matching Screenshot */}
-      <header className="sticky top-0 z-40 bg-white border-b border-slate-100 shadow-2xs">
+      <header className="sticky top-0 z-40 bg-white border-b border-slate-100 shadow-2xs pt-[env(safe-area-inset-top,0px)]">
         <div className="max-w-md md:max-w-xl mx-auto px-4 h-14 flex items-center">
           <button
             onClick={() => navigateTo({ type: 'CASH_BOOK' })}
