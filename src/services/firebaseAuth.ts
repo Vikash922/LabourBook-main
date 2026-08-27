@@ -15,7 +15,7 @@ import { auth, googleProvider, GOOGLE_WEB_CLIENT_ID } from "../firebase";
 import { Capacitor } from "@capacitor/core";
 import { GoogleAuth } from "@codetrix-studio/capacitor-google-auth";
 
-// 1. Initialize Native Google Auth Plugin on Native Platforms
+// 1. Initialize Native Google Auth Plugin on Native Android / iOS
 if (Capacitor.isNativePlatform()) {
   try {
     GoogleAuth.initialize({
@@ -60,68 +60,22 @@ export const signInWithEmail = async (
 };
 
 /**
- * 1-Tap In-App Google Sign In Fallback
- */
-export const signInWithGoogleInApp = async (
-  email: string,
-  name?: string
-): Promise<User> => {
-  const cleanEmail = email.trim().toLowerCase();
-  const internalSecret = `LB_Google_${cleanEmail}_AuthSecure2026!`;
-  
-  try {
-    const cred = await signInWithEmailAndPassword(auth, cleanEmail, internalSecret);
-    return cred.user;
-  } catch (err: any) {
-    if (err?.code === 'auth/user-not-found' || err?.code === 'auth/invalid-credential' || err?.code === 'auth/wrong-password') {
-      const newCred = await createUserWithEmailAndPassword(auth, cleanEmail, internalSecret);
-      if (name && newCred.user) {
-        try {
-          await updateFirebaseProfile(newCred.user, { displayName: name.trim() });
-        } catch (e) {}
-      }
-      return newCred.user;
-    }
-    throw err;
-  }
-};
-
-/**
- * Native Android In-App Google Sign-In (using @codetrix-studio/capacitor-google-auth)
- * Pops up the native Android Google Account Picker bottom-sheet without opening Chrome.
+ * Native Android OS Google Sign-In via @codetrix-studio/capacitor-google-auth
+ * Triggers Android OS native account selection dialog without opening Chrome.
  */
 export const signInWithGoogle = async (): Promise<User | null> => {
   if (Capacitor.isNativePlatform()) {
-    try {
-      // 📱 NATIVE ANDROID GOOGLE ACCOUNT PICKER
-      const googleUser = await GoogleAuth.signIn();
-      const idToken = googleUser.authentication?.idToken;
-      if (!idToken) {
-        // If user object returned without idToken, extract email
-        const email = googleUser.email;
-        if (email) {
-          return await signInWithGoogleInApp(email, googleUser.name);
-        }
-        throw new Error("No idToken or email returned from Google");
-      }
-      const credential = GoogleAuthProvider.credential(idToken);
-      const res = await signInWithCredential(auth, credential);
-      return res.user;
-    } catch (err: any) {
-      console.warn("Native Google Sign-In error:", err);
-      if (
-        err?.message?.includes('cancel') ||
-        err?.message?.includes('closed') ||
-        err?.code === '12501' ||
-        err?.type === 'userCanceled'
-      ) {
-        throw { code: 'auth/popup-closed-by-user', message: 'Google sign-in cancelled' };
-      }
-      // Re-throw to allow component level fallback
-      throw err;
+    // 📱 ANDROID OS NATIVE ACCOUNT PICKER
+    const googleUser = await GoogleAuth.signIn();
+    const idToken = googleUser.authentication?.idToken;
+    if (!idToken) {
+      throw new Error("No ID Token received from Google Sign-In");
     }
+    const credential = GoogleAuthProvider.credential(idToken);
+    const authResult = await signInWithCredential(auth, credential);
+    return authResult.user;
   } else {
-    // 🌐 WEB BROWSER POPUP
+    // 🌐 WEB BROWSER FLOW
     const result = await signInWithPopup(auth, googleProvider);
     return result.user;
   }
