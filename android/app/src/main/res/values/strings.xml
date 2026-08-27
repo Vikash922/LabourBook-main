@@ -4,4 +4,5 @@
     <string name="title_activity_main">LabourBook</string>
     <string name="package_name">com.labourbook.app</string>
     <string name="custom_url_scheme">com.labourbook.app</string>
+    <string name="server_client_id">1027179208222-2hhdrgohaaa7ed068smm0tekptejq4k8.apps.googleusercontent.com</string>
 </resources>

@@ -10,21 +10,17 @@ import { CashBookReportScreen } from './screens/CashBookReportScreen';
 import { LaborReportScreen } from './screens/LaborReportScreen';
 import { BatchPdfHubScreen } from './screens/BatchPdfHubScreen';
 import { SettingsScreen } from './screens/SettingsScreen';
+import { AuthScreen } from './screens/AuthScreen';
 import { AdvanceConfirmation } from './components/AdvanceConfirmation';
 import { CustomToast } from './components/CustomToast';
-import { AuthScreen } from './screens/AuthScreen';
 import { SplashScreen } from './components/SplashScreen';
-import { subscribeToAuthChanges } from './services/firebaseAuth';
-
 import {
-  registerServiceWorker,
-  scheduleDailyReminders
-} from './services/notificationService';
-import { initNativePlatform, listenToNetworkChanges } from './services/nativeBridge';
+  initNativePlatform,
+  listenToNetworkChanges
+} from './services/nativeBridge';
+import { scheduleDailyReminders } from './services/notificationService';
 
 const MainContent: React.FC = () => {
-  const [showSplash, setShowSplash] = useState(true);
-
   const {
     currentScreen,
     toastMessage,
@@ -33,59 +29,35 @@ const MainContent: React.FC = () => {
     clearAdvanceConfirmation,
     isAuthenticated,
     setIsAuthenticated,
-    handleUserLogin,
-    handleUserLogout
+    showToast,
+    goBack
   } = useLabor();
 
-  // Listen to Firebase Auth state for seamless multi-user switching and isolated accounts
+  const [showSplash, setShowSplash] = useState(true);
+
+  // 1. Initialize Native Android Hardware Bridge & Event Listeners on Mount
   useEffect(() => {
-    const unsubscribe = subscribeToAuthChanges((user) => {
-      if (user) {
-        handleUserLogin(user);
-      } else {
-        handleUserLogout();
-      }
-    });
-
-    return () => unsubscribe();
-  }, [handleUserLogin, handleUserLogout]);
-
-  // Online / Reconnection Auto Cloud Sync Listener (Native Network + Web Listener)
-  useEffect(() => {
-    const cleanup = listenToNetworkChanges(() => {
-      const state = useLabor.getState();
-      if (state.firebaseUid && state.userProfile.isCloudSyncEnabled) {
-        state.syncToCloudNow().then(() => {
-          state.showToast('Back online — Cloud synced!');
-        });
-      }
-    });
-
-    return () => cleanup();
-  }, []);
-
-  // Initialize PWA Service Worker & 3 Daily Automated Push Reminders
-  useEffect(() => {
-    registerServiceWorker();
-    scheduleDailyReminders(true);
-  }, []);
-
-  // Initialize Native Android Status Bar & Multi-Level Hardware Back Button Handling
-  useEffect(() => {
-    const cleanup = initNativePlatform(
-      () => {
-        const state = useLabor.getState();
-        return state.goBack();
-      },
-      (msg) => {
-        const state = useLabor.getState();
-        state.showToast(msg);
-      }
+    // Initialize Capacitor Status Bar & Multi-Level Hardware Back Button
+    const cleanupNative = initNativePlatform(
+      () => goBack(),
+      (msg: string) => showToast(msg)
     );
 
-    return () => cleanup();
-  }, []);
+    // Schedule the 3 Native Daily Reminders
+    scheduleDailyReminders();
 
+    // Listen to network status changes
+    const cleanupNetwork = listenToNetworkChanges(() => {
+      showToast('Network connected. Cloud in sync.');
+    });
+
+    return () => {
+      cleanupNative();
+      cleanupNetwork();
+    };
+  }, [goBack, showToast]);
+
+  // Screen router
   const renderScreen = () => {
     switch (currentScreen.type) {
       case 'HOME':
@@ -109,53 +81,49 @@ const MainContent: React.FC = () => {
     }
   };
 
+  // 1. High-Performance Native Splash Screen (No Flash of Home Screen)
+  if (showSplash) {
+    return <SplashScreen onFinish={() => setShowSplash(false)} />;
+  }
+
+  // 2. Jetpack Compose Authentication Screen if Not Logged In
+  if (!isAuthenticated) {
+    return <AuthScreen onLogin={() => setIsAuthenticated(true)} />;
+  }
+
+  // 3. Main Authenticated App View with 100% Fixed Header & Footer
   return (
-    <>
-      {/* 1. High-Performance Splash Screen on Launch */}
-      {showSplash && (
-        <SplashScreen
-          onFinish={() => setShowSplash(false)}
-        />
-      )}
+    <div className="h-[100dvh] w-full bg-[#F8F9FB] text-slate-900 font-sans flex flex-col overflow-hidden select-none selection:bg-blue-500 selection:text-white">
+      {/* Top Fixed Navbar */}
+      <div className="flex-shrink-0 z-40 bg-white">
+        <Navbar />
+      </div>
 
-      {/* 2. Authentication Screen if Not Logged In */}
-      {!isAuthenticated ? (
-        <AuthScreen onLogin={() => setIsAuthenticated(true)} />
-      ) : (
-        /* 3. Main Authenticated App View */
-        <div className="h-[100dvh] bg-[#F8F9FB] text-slate-900 font-sans flex flex-col overflow-hidden select-none selection:bg-blue-500 selection:text-white">
-          {/* Top Fixed Navbar */}
-          <div className="flex-shrink-0 z-40 bg-white">
-            <Navbar />
-          </div>
+      {/* Main Scrollable Screen View (Only List Content Scrolls) */}
+      <main
+        key={currentScreen.type + ('workerId' in currentScreen ? currentScreen.workerId : '')}
+        className="flex-1 w-full overflow-y-auto overscroll-y-contain screen-animate"
+      >
+        {renderScreen()}
+      </main>
 
-          {/* Main Scrollable Screen View */}
-          <main
-            key={currentScreen.type + ('workerId' in currentScreen ? currentScreen.workerId : '')}
-            className="flex-1 w-full overflow-y-auto overscroll-y-contain screen-animate"
-          >
-            {renderScreen()}
-          </main>
+      {/* Bottom Fixed Navigation */}
+      <div className="flex-shrink-0 z-40 bg-white">
+        <BottomNav />
+      </div>
 
-          {/* Bottom Fixed Navigation */}
-          <div className="flex-shrink-0 z-40 bg-white">
-            <BottomNav />
-          </div>
+      {/* Advance Confirmation Notification */}
+      <AdvanceConfirmation
+        confirmation={advanceConfirmation}
+        onDismiss={clearAdvanceConfirmation}
+      />
 
-          {/* Advance Confirmation Notification */}
-          <AdvanceConfirmation
-            confirmation={advanceConfirmation}
-            onDismiss={clearAdvanceConfirmation}
-          />
-
-          {/* Floating Bottom In-App Toast Notification */}
-          <CustomToast
-            message={toastMessage}
-            onDismiss={clearToast}
-          />
-        </div>
-      )}
-    </>
+      {/* Floating Bottom In-App Toast Notification */}
+      <CustomToast
+        message={toastMessage}
+        onDismiss={clearToast}
+      />
+    </div>
   );
 };
 

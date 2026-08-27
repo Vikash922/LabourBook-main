@@ -20,6 +20,11 @@ const config: CapacitorConfig = {
       smallIcon: 'ic_launcher_round',
       iconColor: '#1656D6',
       sound: 'default'
+    },
+    GoogleAuth: {
+      scopes: ['profile', 'email'],
+      serverClientId: '1027179208222-2hhdrgohaaa7ed068smm0tekptejq4k8.apps.googleusercontent.com',
+      forceCodeForRefreshToken: true
     }
   }
 };

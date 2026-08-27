@@ -2,15 +2,31 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signInWithPopup,
-  signInWithRedirect,
+  signInWithCredential,
   getRedirectResult,
   signOut,
   sendPasswordResetEmail,
   updateProfile as updateFirebaseProfile,
   onAuthStateChanged,
-  User
+  User,
+  GoogleAuthProvider
 } from "firebase/auth";
-import { auth, googleProvider } from "../firebase";
+import { auth, googleProvider, GOOGLE_WEB_CLIENT_ID } from "../firebase";
+import { Capacitor } from "@capacitor/core";
+import { GoogleAuth } from "@codetrix-studio/capacitor-google-auth";
+
+// 1. Initialize Native Google Auth Plugin on Native Platforms
+if (Capacitor.isNativePlatform()) {
+  try {
+    GoogleAuth.initialize({
+      clientId: GOOGLE_WEB_CLIENT_ID,
+      scopes: ['profile', 'email'],
+      grantOfflineAccess: true
+    });
+  } catch (e) {
+    console.warn("GoogleAuth init warning:", e);
+  }
+}
 
 export interface AuthUserData {
   uid: string;
@@ -44,50 +60,34 @@ export const signInWithEmail = async (
 };
 
 /**
- * 1-Tap In-App Google Sign In without Chrome redirects
- */
-export const signInWithGoogleInApp = async (
-  email: string,
-  name?: string
-): Promise<User> => {
-  const cleanEmail = email.trim().toLowerCase();
-  // Generate deterministic in-app credentials for instant seamless auth
-  const internalSecret = `LB_Google_${cleanEmail}_Secure2026!`;
-  
-  try {
-    const cred = await signInWithEmailAndPassword(auth, cleanEmail, internalSecret);
-    return cred.user;
-  } catch (err: any) {
-    if (err?.code === 'auth/user-not-found' || err?.code === 'auth/invalid-credential') {
-      const newCred = await createUserWithEmailAndPassword(auth, cleanEmail, internalSecret);
-      if (name && newCred.user) {
-        try {
-          await updateFirebaseProfile(newCred.user, { displayName: name.trim() });
-        } catch (e) {}
-      }
-      return newCred.user;
-    }
-    throw err;
-  }
-};
-
-/**
- * Standard Google Sign-In with popup
+ * Native Android In-App Google Sign-In (using @codetrix-studio/capacitor-google-auth)
+ * Pops up the native Android Google Account Picker bottom-sheet without opening Chrome.
  */
 export const signInWithGoogle = async (): Promise<User | null> => {
-  try {
+  if (Capacitor.isNativePlatform()) {
+    try {
+      // 📱 NATIVE ANDROID GOOGLE ACCOUNT PICKER
+      const googleUser = await GoogleAuth.signIn();
+      const idToken = googleUser.authentication.idToken;
+      const credential = GoogleAuthProvider.credential(idToken);
+      const res = await signInWithCredential(auth, credential);
+      return res.user;
+    } catch (err: any) {
+      console.error("Native Google Sign-In error:", err);
+      if (
+        err?.message?.includes('cancel') ||
+        err?.message?.includes('closed') ||
+        err?.code === '12501' ||
+        err?.type === 'userCanceled'
+      ) {
+        throw { code: 'auth/popup-closed-by-user', message: 'Google sign-in cancelled' };
+      }
+      throw err;
+    }
+  } else {
+    // 🌐 WEB BROWSER POPUP
     const result = await signInWithPopup(auth, googleProvider);
     return result.user;
-  } catch (err: any) {
-    if (
-      err?.code === 'auth/popup-blocked' ||
-      err?.code === 'auth/popup-closed-by-user' ||
-      err?.code === 'auth/cancelled-popup-request'
-    ) {
-      await signInWithRedirect(auth, googleProvider);
-      return null;
-    }
-    throw err;
   }
 };
 
@@ -106,6 +106,11 @@ export const sendPasswordReset = async (email: string): Promise<void> => {
 };
 
 export const signOutFirebase = async (): Promise<void> => {
+  if (Capacitor.isNativePlatform()) {
+    try {
+      await GoogleAuth.signOut();
+    } catch {}
+  }
   await signOut(auth);
 };
 
