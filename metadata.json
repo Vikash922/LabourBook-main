@@ -1,0 +1,7 @@
+{
+  "name": "Laborbook",
+  "description": "Worker attendance, daily wages & cash book ledger with PDF batch reports and encrypted cloud sync.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+

@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "app.web.laborbook.twa",
+        "sha256_cert_fingerprints": ["62:78:08:ED:E5:5D:47:D4:84:B7:56:4F:5F:D1:E3:37:2E:64:4A:5D:CD:9C:AA:FB:DE:98:88:A4:19:78:B3:3B"]
+      }
+    }]
