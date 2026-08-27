@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { StatusBar, Style } from '@capacitor/status-bar';
+import { isNativePlatform } from '../services/nativeBridge';
 
 interface SplashScreenProps {
   onFinish?: () => void;
@@ -9,19 +11,30 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
   const [isFadingOut, setIsFadingOut] = useState(false);
 
   useEffect(() => {
-    // Start parallel scale & fade-in animation on mount
+    // 1. Set Native Status Bar to Pure White matching Splash Screen
+    if (isNativePlatform()) {
+      StatusBar.setBackgroundColor({ color: '#FFFFFF' }).catch(() => {});
+      StatusBar.setStyle({ style: Style.Light }).catch(() => {});
+    }
+
+    // 2. Start parallel scale & fade-in animation on mount
     const animTimer = setTimeout(() => {
       setIsAnimatingIn(true);
     }, 50);
 
-    // Hold for 1500ms after the 800ms animation (Total: 2300ms)
+    // 3. Hold for 1800ms, then smoothly transition
     const holdTimer = setTimeout(() => {
       setIsFadingOut(true);
       const exitTimer = setTimeout(() => {
+        // Restore Status Bar to Brand Blue after Splash
+        if (isNativePlatform()) {
+          StatusBar.setBackgroundColor({ color: '#1656D6' }).catch(() => {});
+          StatusBar.setStyle({ style: Style.Dark }).catch(() => {});
+        }
         if (onFinish) onFinish();
-      }, 400); // Smooth exit transition
+      }, 350);
       return () => clearTimeout(exitTimer);
-    }, 2300);
+    }, 2000);
 
     return () => {
       clearTimeout(animTimer);
@@ -31,33 +44,33 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-between bg-white text-slate-900 select-none transition-opacity duration-400 ease-out ${
+      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-between bg-white text-slate-900 select-none transition-opacity duration-350 ease-out ${
         isFadingOut ? 'opacity-0 pointer-events-none' : 'opacity-100'
       }`}
       style={{ willChange: 'opacity, transform' }}
     >
-      {/* Top Spacer for vertical balance */}
-      <div className="w-full pt-8" />
+      {/* Top Spacer for safe area vertical balance */}
+      <div className="w-full pt-[calc(1.5rem+env(safe-area-inset-top,0px))]" />
 
-      {/* Center Branding Column (Centered Vertically & Horizontally) */}
+      {/* Center Branding Column */}
       <div
-        className="flex flex-col items-center text-center px-6 transition-all duration-800 ease-out"
+        className="flex flex-col items-center text-center px-6 transition-all duration-700 ease-out"
         style={{
-          transform: isAnimatingIn ? 'scale(1.0)' : 'scale(0.5)',
+          transform: isAnimatingIn ? 'scale(1.0)' : 'scale(0.6)',
           opacity: isAnimatingIn ? 1.0 : 0.0,
           willChange: 'transform, opacity'
         }}
       >
-        {/* 1. App Logo / Avatar: 140px x 140px, Circle / Rounded Pill */}
-        <div className="w-[140px] h-[140px] rounded-full bg-white shadow-xl shadow-slate-200/60 border border-slate-100 flex items-center justify-center p-3.5 mb-6 ring-1 ring-slate-100">
+        {/* 1. App Logo / Avatar: Clean Circular Badge with Soft Shadow */}
+        <div className="w-[125px] h-[125px] rounded-full bg-white shadow-xl shadow-slate-200/60 border border-slate-100 flex items-center justify-center p-3 mb-5 overflow-hidden ring-4 ring-slate-50">
           <img
             src="/ic_app_logo.png"
             alt="LaborBook Logo"
-            className="w-full h-full object-contain drop-shadow-sm"
+            className="w-full h-full object-contain rounded-full"
           />
         </div>
 
-        {/* 2. Dual-Tone App Title (Horizontal Row) */}
+        {/* 2. Dual-Tone App Title */}
         <div className="flex items-center justify-center text-4xl sm:text-[36px] tracking-tight leading-none select-none">
           <span className="font-extrabold text-[#1E4665]">
             Labor
@@ -67,21 +80,21 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
           </span>
         </div>
 
-        {/* 3. Tagline / Subtitle: 8px spacing, 16px font, Medium 500, Slate Gray */}
-        <p className="mt-2 text-base sm:text-[16px] font-medium text-[#64748B] tracking-normal">
+        {/* 3. Tagline / Subtitle */}
+        <p className="mt-2 text-[15px] font-medium text-[#64748B] tracking-normal">
           Your Work. Organized.
         </p>
       </div>
 
-      {/* Bottom Footer (Pinned to Bottom Center, 32px padding, SemiBold 600, Cool Gray) */}
+      {/* Bottom Footer Pinned to Bottom */}
       <div
-        className="pb-8 safe-bottom transition-opacity duration-800 ease-out"
+        className="pb-[calc(2rem+env(safe-area-inset-bottom,0px))] transition-opacity duration-700 ease-out"
         style={{
           opacity: isAnimatingIn ? 1.0 : 0.0,
           willChange: 'opacity'
         }}
       >
-        <p className="text-sm sm:text-[14px] font-semibold text-[#94A3B8] tracking-wide">
+        <p className="text-[13px] font-semibold text-[#94A3B8] tracking-wider uppercase">
           By Vikash
         </p>
       </div>
