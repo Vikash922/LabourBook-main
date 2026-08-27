@@ -103,7 +103,7 @@ export const HomeScreen: React.FC = () => {
       <button
         type="button"
         onClick={() => navigateTo({ type: 'ADD_LABOR' })}
-        className="fixed bottom-[calc(4.5rem+env(safe-area-inset-bottom,0px))] right-4 sm:right-6 z-30 flex items-center gap-1.5 px-4 py-2.5 bg-[#1656D6] hover:bg-blue-700 active:scale-95 text-white font-bold text-xs sm:text-sm rounded-full shadow-lg shadow-[#1656D6]/35 uppercase tracking-wider transition-all duration-150 cursor-pointer"
+        className="fixed bottom-[calc(5.25rem+env(safe-area-inset-bottom,0px))] right-4 sm:right-6 z-30 flex items-center gap-2 px-4.5 py-3 bg-[#1656D6] hover:bg-blue-700 active:scale-95 text-white font-extrabold text-xs sm:text-sm rounded-full shadow-[0_8px_24px_rgba(22,86,214,0.45)] uppercase tracking-wider transition-all duration-150 cursor-pointer"
       >
         <UserPlus className="w-4 h-4 stroke-[2.5]" />
         <span>ADD LABOUR</span>

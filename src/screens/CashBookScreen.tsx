@@ -227,12 +227,12 @@ export const CashBookScreen: React.FC = () => {
       </div>
 
       {/* 4. Docked Action Bar: ALWAYS VISIBLE ABOVE BOTTOM NAV WITHOUT SCROLLING */}
-      <div className="fixed bottom-[calc(4rem+env(safe-area-inset-bottom,0px))] left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-slate-200/80 px-4 py-2.5 shadow-[0_-4px_16px_rgba(0,0,0,0.06)]">
+      <div className="fixed bottom-[calc(4.5rem+env(safe-area-inset-bottom,0px))] left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-slate-200/90 px-4 py-2.5 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
         <div className="max-w-md md:max-w-xl mx-auto flex items-center gap-3">
           <button
             type="button"
             onClick={() => setActiveModalType('CASH_IN')}
-            className="flex-1 py-3.5 bg-[#28A76B] hover:bg-emerald-700 active:scale-95 text-white font-extrabold text-xs sm:text-sm rounded-xl sm:rounded-2xl shadow-md shadow-[#28A76B]/25 flex items-center justify-center gap-1.5 cursor-pointer transition uppercase tracking-wider"
+            className="flex-1 py-3 bg-[#28A76B] hover:bg-emerald-700 active:scale-95 text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-md shadow-[#28A76B]/25 flex items-center justify-center gap-1.5 cursor-pointer transition uppercase tracking-wider"
           >
             <Plus className="w-4 h-4 stroke-[3]" />
             <span>CASH IN</span>
@@ -241,7 +241,7 @@ export const CashBookScreen: React.FC = () => {
           <button
             type="button"
             onClick={() => setActiveModalType('CASH_OUT')}
-            className="flex-1 py-3.5 bg-[#E02D3C] hover:bg-red-700 active:scale-95 text-white font-extrabold text-xs sm:text-sm rounded-xl sm:rounded-2xl shadow-md shadow-[#E02D3C]/25 flex items-center justify-center gap-1.5 cursor-pointer transition uppercase tracking-wider"
+            className="flex-1 py-3 bg-[#E02D3C] hover:bg-red-700 active:scale-95 text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-md shadow-[#E02D3C]/25 flex items-center justify-center gap-1.5 cursor-pointer transition uppercase tracking-wider"
           >
             <Minus className="w-4 h-4 stroke-[3]" />
             <span>CASH OUT</span>

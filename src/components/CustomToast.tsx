@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   CheckCircle2,
   Trash2,
@@ -14,6 +14,14 @@ interface CustomToastProps {
 }
 
 export const CustomToast: React.FC<CustomToastProps> = ({ message, onDismiss }) => {
+  useEffect(() => {
+    if (!message) return;
+    const timer = setTimeout(() => {
+      onDismiss();
+    }, 3200);
+    return () => clearTimeout(timer);
+  }, [message, onDismiss]);
+
   if (!message) return null;
 
   const msgLower = message.toLowerCase();
@@ -68,7 +76,7 @@ export const CustomToast: React.FC<CustomToastProps> = ({ message, onDismiss }) 
         );
       case 'danger':
         return (
-          <div className="w-5 h-5 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center shrink-0">
+          <div className="w-5 h-5 rounded-full bg-rose-500/20 text-rose-400 flex items-center justify-center shrink-0">
             <Trash2 className="w-3 h-3 stroke-[2.5]" />
           </div>
         );
@@ -97,7 +105,7 @@ export const CustomToast: React.FC<CustomToastProps> = ({ message, onDismiss }) 
     <div
       role="status"
       aria-live="polite"
-      className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-[9990] px-4 py-2 bg-slate-900/90 backdrop-blur-xl text-white text-xs font-semibold rounded-full shadow-xl shadow-slate-950/30 border border-white/15 flex items-center gap-2.5 max-w-[90vw] sm:max-w-md animate-in slide-in-from-top-4 fade-in duration-200 select-none pointer-events-auto"
+      className="fixed bottom-[calc(5rem+env(safe-area-inset-bottom,0px))] left-1/2 -translate-x-1/2 z-[9990] px-4 py-2.5 bg-slate-900/95 backdrop-blur-2xl text-white text-xs font-semibold rounded-full shadow-2xl shadow-slate-950/40 border border-white/15 flex items-center gap-2.5 max-w-[90vw] sm:max-w-md animate-in slide-in-from-bottom-5 fade-in zoom-in-95 duration-250 select-none pointer-events-auto"
     >
       {getIcon()}
 
@@ -108,7 +116,7 @@ export const CustomToast: React.FC<CustomToastProps> = ({ message, onDismiss }) 
       <button
         type="button"
         onClick={onDismiss}
-        className="w-4 h-4 rounded-full hover:bg-white/20 text-slate-400 hover:text-white flex items-center justify-center transition cursor-pointer shrink-0 ml-0.5"
+        className="w-4 h-4 rounded-full hover:bg-white/20 text-slate-400 hover:text-white flex items-center justify-center transition cursor-pointer shrink-0 ml-1"
         aria-label="Dismiss notification"
       >
         <X className="w-3 h-3" />

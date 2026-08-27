@@ -123,20 +123,24 @@ const MainContent: React.FC = () => {
         <AuthScreen onLogin={() => setIsAuthenticated(true)} />
       ) : (
         /* 3. Main Authenticated App View */
-        <div className="min-h-screen bg-[#F8F9FB] text-slate-900 font-sans flex flex-col selection:bg-blue-500 selection:text-white">
-          {/* Top Navbar */}
-          <Navbar />
+        <div className="h-[100dvh] bg-[#F8F9FB] text-slate-900 font-sans flex flex-col overflow-hidden select-none selection:bg-blue-500 selection:text-white">
+          {/* Top Fixed Navbar */}
+          <div className="flex-shrink-0 z-40 bg-white">
+            <Navbar />
+          </div>
 
-          {/* Main Screen View with Smooth GPU 60fps Micro-Transition */}
+          {/* Main Scrollable Screen View */}
           <main
             key={currentScreen.type + ('workerId' in currentScreen ? currentScreen.workerId : '')}
-            className="flex-1 w-full screen-animate"
+            className="flex-1 w-full overflow-y-auto overscroll-y-contain screen-animate"
           >
             {renderScreen()}
           </main>
 
-          {/* Bottom Navigation */}
-          <BottomNav />
+          {/* Bottom Fixed Navigation */}
+          <div className="flex-shrink-0 z-40 bg-white">
+            <BottomNav />
+          </div>
 
           {/* Advance Confirmation Notification */}
           <AdvanceConfirmation
@@ -144,7 +148,7 @@ const MainContent: React.FC = () => {
             onDismiss={clearAdvanceConfirmation}
           />
 
-          {/* Floating Top In-App Toast Notification */}
+          {/* Floating Bottom In-App Toast Notification */}
           <CustomToast
             message={toastMessage}
             onDismiss={clearToast}
