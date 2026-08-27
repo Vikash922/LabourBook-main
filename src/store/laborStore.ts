@@ -63,14 +63,14 @@ const localForageStorage: StateStorage = {
 // 2. Initial profile
 // ─────────────────────────────────────────────
 export const INITIAL_PROFILE: UserProfile = {
-  name: "Vikash Singh",
-  businessName: "LabourBook Construction",
-  mobile: "+91 98765 43210",
-  email: "vikashsingh2007x@gmail.com",
+  name: "Contractor",
+  businessName: "LabourBook",
+  mobile: "",
+  email: "",
   language: "en",
   isCloudSyncEnabled: true,
-  isLoggedIn: true,
-  lastCloudBackupTime: "Today, 10:45 AM",
+  isLoggedIn: false,
+  lastCloudBackupTime: "Never",
   isPro: true,
   authProvider: "Google"
 };
@@ -155,8 +155,15 @@ interface LaborState {
 // ─────────────────────────────────────────────
 // 4. CSV helpers (inline to avoid circular deps)
 // ─────────────────────────────────────────────
-function escapeCsv(val: string | number): string {
-  let str = String(val ?? "").replace(/\r/g, " ").replace(/\n/g, " ");
+function escapeCsv(val: string | number | undefined | null): string {
+  if (val === undefined || val === null) return "";
+  let str = String(val).replace(/\r/g, " ").replace(/\n/g, " ");
+
+  // Neutralize CSV Formula Injection (DDE attack mitigation)
+  if (/^[=+\-@\t\r]/.test(str)) {
+    str = "'" + str;
+  }
+
   if (str.includes(",") || str.includes("\"") || str.includes(";")) {
     str = str.replace(/"/g, '""');
     return `"${str}"`;
@@ -426,7 +433,7 @@ export const useLaborStore = create<LaborState>()(
         workers: migrated?.workers ?? [],
         transactions: migrated?.transactions ?? [],
         userProfile: migrated?.profile ?? INITIAL_PROFILE,
-        isAuthenticated: migrated?.isAuthenticated ?? true,
+        isAuthenticated: migrated?.isAuthenticated ?? false,
         firebaseUid: null,
 
         // ── Session State (not persisted) ──

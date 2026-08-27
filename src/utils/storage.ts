@@ -6,14 +6,14 @@ const STORAGE_KEY_TRANSACTIONS = 'laborbook_transactions_v1';
 const STORAGE_KEY_PROFILE = 'laborbook_profile_v1';
 
 export const INITIAL_PROFILE: UserProfile = {
-  name: "Vikash Singh",
-  businessName: "LabourBook Construction",
-  mobile: "+91 98765 43210",
-  email: "vikashsingh2007x@gmail.com",
+  name: "Contractor",
+  businessName: "LabourBook",
+  mobile: "",
+  email: "",
   language: "en",
   isCloudSyncEnabled: true,
-  isLoggedIn: true,
-  lastCloudBackupTime: "Today, 10:45 AM",
+  isLoggedIn: false,
+  lastCloudBackupTime: "Never",
   isPro: true,
   authProvider: "Google"
 };
