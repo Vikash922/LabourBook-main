@@ -23,7 +23,7 @@ export const BottomNav: React.FC = () => {
   const isSettingsActive = currentScreen.type === 'SETTINGS';
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-slate-200/90 shadow-sm pb-[env(safe-area-inset-bottom,0px)]">
+    <nav className="bg-white border-t border-slate-200/90 shadow-sm pb-[env(safe-area-inset-bottom,0px)]">
       <div className="max-w-md md:max-w-xl mx-auto h-16 flex items-stretch justify-around px-2">
         {/* Tab 1: Labor */}
         <button

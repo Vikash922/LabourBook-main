@@ -93,8 +93,9 @@ export const CashBookScreen: React.FC = () => {
   };
 
   return (
-    <div className="min-h-[calc(100dvh-4rem)] bg-white pb-48 selection:bg-[#1862D6] selection:text-white">
-      <div className="max-w-md md:max-w-xl mx-auto px-4 pt-3.5 space-y-3.5">
+    <div className="relative flex flex-col h-full bg-white selection:bg-[#1862D6] selection:text-white">
+      {/* Search Bar + Summary Card */}
+      <div className="flex-shrink-0 max-w-md md:max-w-xl mx-auto w-full px-4 pt-3.5 space-y-3.5">
         {/* 1. Search Bar */}
         <div className="relative">
           <div className="w-full px-4 py-2.5 bg-white border border-slate-200/90 rounded-2xl flex items-center gap-2.5 shadow-2xs">
@@ -160,9 +161,11 @@ export const CashBookScreen: React.FC = () => {
             <span>View Report</span>
           </button>
         </div>
+      </div>
 
-        {/* 3. Transactions Table */}
-        <div className="pt-1">
+      {/* 3. Transactions Table (Scrollable container) */}
+      <div className="flex-1 overflow-y-auto overscroll-contain pb-24">
+        <div className="max-w-md md:max-w-xl mx-auto px-4 pt-1">
           {/* Table Header */}
           <div className="grid grid-cols-[3.8rem_1fr_6rem] border-t border-b border-slate-200/90 py-2.5 px-3 bg-white text-xs font-bold text-slate-900 select-none">
             <div>Date</div>
@@ -227,7 +230,7 @@ export const CashBookScreen: React.FC = () => {
       </div>
 
       {/* 4. Docked Action Bar: ALWAYS VISIBLE ABOVE BOTTOM NAV WITHOUT SCROLLING */}
-      <div className="fixed bottom-[calc(4.5rem+env(safe-area-inset-bottom,0px))] left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-slate-200/90 px-4 py-2.5 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
+      <div className="absolute bottom-2 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-slate-200/90 px-4 py-2.5 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
         <div className="max-w-md md:max-w-xl mx-auto flex items-center gap-3">
           <button
             type="button"

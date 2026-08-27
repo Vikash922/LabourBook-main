@@ -121,10 +121,16 @@ export const AuthScreen = ({ onLogin }: { onLogin: () => void }) => {
         // 3. Auto-redirect to Main Dashboard
         onLogin();
       }
+      // If user is null, redirect-based flow was triggered — result will be
+      // picked up by the useEffect on page mount via checkGoogleRedirectResult
     } catch (err: any) {
       console.error("Google Sign-In Error:", err);
       // If user simply closed/cancelled account picker, don't show red error banner
-      if (err?.code === 'auth/popup-closed-by-user' || err?.message?.includes('cancel') || err?.type === 'userCanceled') {
+      if (
+        err?.code === 'auth/popup-closed-by-user' ||
+        err?.message?.includes('cancel') ||
+        err?.type === 'userCanceled'
+      ) {
         return;
       }
       setErrorMsg(formatFirebaseError(err));

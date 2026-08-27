@@ -108,7 +108,7 @@ export const SettingsScreen: React.FC = () => {
     .toUpperCase();
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] pb-24 pt-2.5 px-3.5 max-w-md mx-auto space-y-3 selection:bg-[#1656D6] selection:text-white">
+    <div className="h-full overflow-y-auto overscroll-contain bg-[#F8FAFC] pb-24 pt-2.5 px-3.5 max-w-md mx-auto space-y-3 selection:bg-[#1656D6] selection:text-white">
       {/* 1. Compact Profile Header Card */}
       <div className="bg-white rounded-2xl border border-slate-200/80 shadow-2xs p-3 flex items-center justify-between">
         <div className="flex items-center gap-3 min-w-0">
