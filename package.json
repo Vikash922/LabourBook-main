@@ -9,7 +9,8 @@
     "preview": "node ./node_modules/vite/bin/vite.js preview",
     "cap:sync": "node ./node_modules/@capacitor/cli/bin/capacitor sync android",
     "cap:open": "node ./node_modules/@capacitor/cli/bin/capacitor open android",
-    "build:android": "node ./node_modules/typescript/bin/tsc && node ./node_modules/vite/bin/vite.js build && node ./node_modules/@capacitor/cli/bin/capacitor sync android"
+    "build:android": "node ./node_modules/typescript/bin/tsc && node ./node_modules/vite/bin/vite.js build && node ./node_modules/@capacitor/cli/bin/capacitor sync android",
+    "deploy": "node ./node_modules/typescript/bin/tsc && node ./node_modules/vite/bin/vite.js build && firebase deploy --only hosting"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.0",
