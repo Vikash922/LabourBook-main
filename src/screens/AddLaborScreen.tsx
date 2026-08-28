@@ -92,11 +92,12 @@ export const AddLaborScreen: React.FC = () => {
     if (!searchQuery.trim()) return sorted;
     const q = searchQuery.toLowerCase().trim();
     
-    return sorted.filter(
-      (c) =>
-        (c.name || '').toLowerCase().includes(q) ||
-        (c.phone || '').replace(/[^0-9]/g, '').includes(q.replace(/[^0-9]/g, ''))
-    );
+    return sorted.filter((c) => {
+      const nameMatch = (c.name || '').toLowerCase().includes(q);
+      const qNums = q.replace(/[^0-9]/g, '');
+      const phoneMatch = qNums.length > 0 && (c.phone || '').replace(/[^0-9]/g, '').includes(qNums);
+      return nameMatch || phoneMatch;
+    });
   }, [contacts, searchQuery]);
 
   // Handle refresh contacts
