@@ -163,26 +163,26 @@ export const CashBookScreen: React.FC = () => {
         </div>
       </div>
 
-      {/* 3. Sticky Table Header (Black background, fixed outside scroll) */}
-      <div className="flex-shrink-0 border-y border-slate-300 bg-slate-900 text-white shadow-sm z-10">
+      {/* 3. Sticky Table Header (Matches Reference Image) */}
+      <div className="flex-shrink-0 border-y border-slate-200 bg-white shadow-sm z-10">
         <div className="max-w-md md:max-w-xl mx-auto px-4">
-          <div className="grid grid-cols-[3.8rem_1fr_6rem] py-2.5 items-center text-[11px] uppercase tracking-wider font-extrabold select-none">
-            <div className="border-r border-slate-700 pr-2">Date</div>
-            <div className="border-r border-slate-700 px-3">Notes</div>
-            <div className="pl-3 text-right">₹ Amount</div>
+          <div className="grid grid-cols-[4.5rem_1fr_7.5rem] py-3 items-center text-sm font-bold text-slate-900 select-none">
+            <div className="border-r border-slate-200 text-center">Date</div>
+            <div className="border-r border-slate-200 px-4">Notes</div>
+            <div className="pl-4">₹ Amount</div>
           </div>
         </div>
       </div>
 
-      {/* 4. Transactions Table (Only THIS scrolls) */}
-      <div className="flex-1 overflow-y-auto overscroll-contain pb-24 bg-[#F8F9FB]">
+      {/* 4. Transactions Table */}
+      <div className="flex-1 overflow-y-auto overscroll-contain pb-24 bg-white">
         <div className="max-w-md md:max-w-xl mx-auto px-4">
           {filteredTransactions.length === 0 ? (
             <div className="p-8 text-center bg-white mt-2 rounded-xl shadow-2xs border border-slate-100">
               <p className="text-xs text-slate-400 font-medium">No transactions found for this month.</p>
             </div>
           ) : (
-            <div className="bg-white border-x border-b border-slate-200 shadow-2xs">
+            <div className="bg-white border-x border-b border-slate-200">
               {filteredTransactions.map((tx, idx) => {
                 const isCashIn = tx.type === 'CASH_IN';
                 const { day, dayOfWeek } = parseTxDate(tx.fullDate || tx.dateDisplay);
@@ -192,39 +192,40 @@ export const CashBookScreen: React.FC = () => {
                   <div
                     key={tx.id}
                     onClick={() => setDetailTransaction(tx)}
-                    className={`grid grid-cols-[3.8rem_1fr_6rem] items-center py-3.5 px-3 hover:bg-slate-50 transition cursor-pointer active:bg-slate-100 ${
+                    className={`grid grid-cols-[4.5rem_1fr_7.5rem] items-center py-2.5 hover:bg-slate-50 transition cursor-pointer active:bg-slate-100 ${
                       !isLast ? 'border-b border-slate-200' : ''
                     }`}
                   >
                     {/* Column 1: Date */}
-                    <div className="border-r border-slate-200 pr-2 h-full flex flex-col justify-center">
-                      <span className="text-sm sm:text-base font-black text-slate-900 block leading-tight">
+                    <div className="border-r border-slate-200 h-full flex flex-col justify-center items-center">
+                      <span className="text-[17px] font-bold text-slate-900 block leading-tight">
                         {day}
                       </span>
-                      <span className="text-[10px] sm:text-[11px] font-bold text-slate-500 block leading-tight mt-0.5">
+                      <span className="text-[13px] text-slate-400 block leading-tight mt-0.5">
                         {dayOfWeek}
                       </span>
                     </div>
 
                     {/* Column 2: Notes & Payment Mode */}
-                    <div className="border-r border-slate-200 px-3 h-full flex flex-col justify-center">
-                      <span className="text-xs sm:text-sm font-bold text-slate-900 block leading-tight line-clamp-1">
+                    <div className="border-r border-slate-200 px-4 h-full flex flex-col justify-center">
+                      <span className="text-[15px] text-slate-900 block leading-tight line-clamp-1">
                         {tx.notes || (isCashIn ? 'Cash In' : 'Expense')}
                       </span>
-                      <span className="text-[10px] font-bold text-slate-500 tracking-wide block leading-tight mt-1">
-                        {tx.paymentMethod === 'ONLINE' ? 'ONLINE/UPI' : 'CASH'}
+                      <span className="text-[12px] text-slate-400 uppercase tracking-wide block leading-tight mt-1">
+                        {tx.paymentMethod === 'ONLINE' ? 'UPI' : 'CASH'}
                       </span>
                     </div>
 
                     {/* Column 3: Amount & Chevron */}
-                    <div className="pl-3 h-full flex flex-col items-end justify-center">
+                    <div className="pl-4 pr-3 h-full flex items-center justify-between">
                       <span
-                        className={`text-sm sm:text-base font-black ${
-                          isCashIn ? 'text-[#10B981]' : 'text-[#EF4444]'
+                        className={`text-[15px] font-bold ${
+                          isCashIn ? 'text-[#28A745]' : 'text-[#DC3545]'
                         }`}
                       >
-                        {isCashIn ? '+' : '-'}₹{tx.amount}
+                        ₹{tx.amount}
                       </span>
+                      <ChevronRight className="w-4 h-4 text-slate-300 stroke-[2.5]" />
                     </div>
                   </div>
                 );

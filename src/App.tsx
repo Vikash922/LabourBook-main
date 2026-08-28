@@ -46,14 +46,8 @@ const MainContent: React.FC = () => {
     // Schedule the 3 Native Daily Reminders
     scheduleDailyReminders();
 
-    // Listen to network status changes
-    const cleanupNetwork = listenToNetworkChanges(() => {
-      showToast('Network connected. Cloud in sync.');
-    });
-
     return () => {
       cleanupNative();
-      cleanupNetwork();
     };
   }, [goBack, showToast]);
 

@@ -10,6 +10,8 @@ import {
   X,
   ShieldCheck
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Contacts } from '@capacitor-community/contacts';
 import { useLabor } from '../store/laborStore';
 import { SalaryType } from '../types';
 import { getAvatarBgWithOpacity, AVATAR_PALETTE } from '../utils/avatar';
@@ -94,8 +96,7 @@ export const AddLaborScreen: React.FC = () => {
   const handlePickRealContacts = async () => {
     try {
       if (Capacitor.isNativePlatform()) {
-        const { Contacts } = await import('@capacitor-community/contacts');
-        
+        showToast('Checking permissions...');
         // Check permissions
         let perm = await Contacts.checkPermissions();
         if (perm.contacts !== 'granted') {
@@ -104,7 +105,8 @@ export const AddLaborScreen: React.FC = () => {
 
         if (perm.contacts === 'granted') {
           setHasPermission(true);
-          showToast('Fetching contacts...');
+          setShowPermissionModal(false);
+          showToast('Fetching your contacts, please wait...');
           
           // Fetch ALL contacts to display in the list
           const result = await Contacts.getContacts({
@@ -173,6 +175,7 @@ export const AddLaborScreen: React.FC = () => {
     } catch (err: any) {
       if (err.name !== 'SecurityError' && err.name !== 'AbortError' && !err.message?.includes('User canceled')) {
         console.warn("Contact picker error:", err);
+        showToast("Error loading contacts: " + err.message);
       }
     }
   };
