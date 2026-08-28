@@ -10,7 +10,6 @@ import {
   X,
   ShieldCheck
 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 import { Contacts } from '@capacitor-community/contacts';
 import { useLabor } from '../store/laborStore';
 import { SalaryType } from '../types';
