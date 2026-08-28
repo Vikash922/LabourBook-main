@@ -166,10 +166,10 @@ export const CashBookScreen: React.FC = () => {
       {/* 3. Sticky Table Header (Matches Reference Image) */}
       <div className="flex-shrink-0 border-y border-slate-200 bg-white shadow-sm z-10">
         <div className="max-w-md md:max-w-xl mx-auto px-4">
-          <div className="grid grid-cols-[4.5rem_1fr_7.5rem] py-3 items-center text-sm font-bold text-slate-900 select-none">
-            <div className="border-r border-slate-200 text-center">Date</div>
-            <div className="border-r border-slate-200 px-4">Notes</div>
-            <div className="pl-4">₹ Amount</div>
+          <div className="grid grid-cols-[19%_46%_35%] py-3 items-stretch text-sm font-bold text-slate-900 select-none">
+            <div className="border-r border-slate-200 flex items-center justify-center">Date</div>
+            <div className="border-r border-slate-200 px-4 flex items-center">Notes</div>
+            <div className="pl-4 flex items-center">₹ Amount</div>
           </div>
         </div>
       </div>
@@ -192,12 +192,12 @@ export const CashBookScreen: React.FC = () => {
                   <div
                     key={tx.id}
                     onClick={() => setDetailTransaction(tx)}
-                    className={`grid grid-cols-[4.5rem_1fr_7.5rem] items-center py-2.5 hover:bg-slate-50 transition cursor-pointer active:bg-slate-100 ${
+                    className={`grid grid-cols-[19%_46%_35%] items-stretch hover:bg-slate-50 transition cursor-pointer active:bg-slate-100 ${
                       !isLast ? 'border-b border-slate-200' : ''
                     }`}
                   >
                     {/* Column 1: Date */}
-                    <div className="border-r border-slate-200 h-full flex flex-col justify-center items-center">
+                    <div className="border-r border-slate-200 py-3 flex flex-col justify-center items-center">
                       <span className="text-[17px] font-bold text-slate-900 block leading-tight">
                         {day}
                       </span>
@@ -207,7 +207,7 @@ export const CashBookScreen: React.FC = () => {
                     </div>
 
                     {/* Column 2: Notes & Payment Mode */}
-                    <div className="border-r border-slate-200 px-4 h-full flex flex-col justify-center">
+                    <div className="border-r border-slate-200 px-4 py-3 flex flex-col justify-center">
                       <span className="text-[15px] text-slate-900 block leading-tight line-clamp-1">
                         {tx.notes || (isCashIn ? 'Cash In' : 'Expense')}
                       </span>
@@ -217,7 +217,7 @@ export const CashBookScreen: React.FC = () => {
                     </div>
 
                     {/* Column 3: Amount & Chevron */}
-                    <div className="pl-4 pr-3 h-full flex items-center justify-between">
+                    <div className="pl-4 pr-3 py-3 flex items-center justify-between">
                       <span
                         className={`text-[15px] font-bold ${
                           isCashIn ? 'text-[#28A745]' : 'text-[#DC3545]'
@@ -225,7 +225,7 @@ export const CashBookScreen: React.FC = () => {
                       >
                         ₹{tx.amount}
                       </span>
-                      <ChevronRight className="w-4 h-4 text-slate-300 stroke-[2.5]" />
+                      <ChevronRight className="w-4 h-4 text-slate-300 stroke-[2.5] shrink-0" />
                     </div>
                   </div>
                 );

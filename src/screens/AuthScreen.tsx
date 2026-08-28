@@ -72,7 +72,10 @@ export const AuthScreen = ({ onLogin }: { onLogin: () => void }) => {
     if (code.includes('popup-closed-by-user') || code.includes('cancelled') || err?.message?.includes('cancel')) {
       return 'Google sign-in was cancelled.';
     }
-    return err?.message || 'Authentication failed. Please check your connection.';
+    
+    // Fallback: show the EXACT native error string so the user can debug Google Sign-In issues
+    const rawError = err?.message || err?.type || JSON.stringify(err);
+    return `Error: ${rawError} (Code: ${code || 'unknown'})`;
   };
 
   const handleEmailSubmit = async (e?: React.FormEvent) => {
