@@ -105,18 +105,8 @@ _Generated via Laborbook App_`;
   };
 
   const handleShareWhatsApp = async () => {
-    const text = generateReportSummaryText();
-    const shared = await universalShare({
-      title: 'Cash Book Report',
-      text: text,
-      dialogTitle: 'Share Cash Book Report'
-    });
-    if (!shared) {
-      await copyToClipboard(text);
-      showToast('Report copied to clipboard!');
-      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
-      window.open(url, '_blank');
-    }
+    // Sharing PDF directly as requested by user
+    handleDownloadPdf();
   };
 
   return (
@@ -192,56 +182,64 @@ _Generated via Laborbook App_`;
           </div>
         </div>
 
-        {/* 3. 3-Column Transactions Table Matching Screenshot */}
+        {/* 3. 3-Column Transactions Table (Exact Match to CashBook Grid) */}
         <div className="pt-1">
           {/* Table Header */}
-          <div className="grid grid-cols-[3.8rem_1fr_6rem] border-t border-b border-slate-200/90 py-2.5 px-3 bg-white text-xs font-bold text-slate-900 select-none">
-            <div>Date</div>
-            <div>Notes</div>
-            <div className="text-left">₹ Amount</div>
+          <div className="w-full">
+            <div className="grid grid-cols-[19%_45%_36%] py-2 items-stretch border-y border-[#000000] bg-white text-[15px] font-black text-black select-none">
+              <div className="border-r border-[#000000] flex items-center justify-center">Date</div>
+              <div className="border-r border-[#000000] px-3 flex items-center">Notes</div>
+              <div className="pl-3 flex items-center">₹ Amount</div>
+            </div>
           </div>
 
           {/* Table Rows */}
           {filtered.length === 0 ? (
-            <div className="p-8 text-center bg-white space-y-2 border-b border-slate-100">
+            <div className="p-8 text-center bg-white border border-slate-100 mx-4 mt-2 rounded-xl">
               <p className="text-xs text-slate-400 font-medium">No transactions found for this date range.</p>
             </div>
           ) : (
-            <div className="divide-y divide-slate-100 bg-white border-b border-slate-100">
-              {filtered.map((tx) => {
+            <div className="bg-white border-b border-[#000000] w-full">
+              {filtered.map((tx, idx) => {
                 const isCashIn = tx.type === 'CASH_IN';
                 const { day, dayOfWeek } = parseTxDate(tx.fullDate || tx.dateDisplay);
+                const isLast = idx === filtered.length - 1;
 
                 return (
                   <div
                     key={tx.id}
-                    className="grid grid-cols-[3.8rem_1fr_6rem] items-center py-3 px-3 hover:bg-slate-50 transition"
+                    className={`grid grid-cols-[19%_45%_36%] items-stretch hover:bg-slate-50 transition ${
+                      !isLast ? 'border-b border-[#000000]' : ''
+                    }`}
                   >
                     {/* Column 1: Date */}
-                    <div>
-                      <span className="text-sm sm:text-base font-bold text-slate-900 block leading-tight">
+                    <div className="border-r border-[#000000] py-1.5 flex flex-col justify-center items-center">
+                      <span className="text-[17px] font-black text-black block leading-none">
                         {day}
                       </span>
-                      <span className="text-[11px] font-medium text-slate-400 block leading-tight">
+                      <span className="text-[12px] text-slate-500 block leading-none mt-1">
                         {dayOfWeek}
                       </span>
                     </div>
 
-                    {/* Column 2: Notes */}
-                    <div className="pr-2">
-                      <span className="text-xs sm:text-sm font-medium text-slate-900 block leading-tight line-clamp-1">
+                    {/* Column 2: Notes & Payment Mode */}
+                    <div className="border-r border-[#000000] px-3 py-1.5 flex flex-col justify-center">
+                      <span className="text-[15px] text-black font-semibold block leading-none line-clamp-1">
                         {tx.notes || (isCashIn ? 'Cash In' : 'Expense')}
+                      </span>
+                      <span className="text-[11px] text-slate-500 uppercase tracking-wide block leading-none mt-1">
+                        {tx.paymentMethod === 'ONLINE' ? 'UPI' : 'CASH'}
                       </span>
                     </div>
 
                     {/* Column 3: ₹ Amount */}
-                    <div className="text-left">
+                    <div className="pl-3 pr-3 py-1.5 flex items-center justify-start">
                       <span
-                        className={`text-sm sm:text-base font-bold ${
-                          isCashIn ? 'text-[#10B981]' : 'text-[#EF4444]'
+                        className={`text-[15px] font-bold ${
+                          isCashIn ? 'text-[#28A745]' : 'text-[#DC3545]'
                         }`}
                       >
-                        ₹ {Number(tx.amount).toFixed(1)}
+                        ₹{tx.amount}
                       </span>
                     </div>
                   </div>

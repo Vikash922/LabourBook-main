@@ -71,6 +71,18 @@ export const AddLaborScreen: React.FC = () => {
     localStorage.setItem(STORAGE_PERMISSION_KEY, String(hasPermission));
   }, [hasPermission]);
 
+  // Auto-prompt for contacts on mount if native and permission not granted
+  useEffect(() => {
+    let isMounted = true;
+    if (!hasPermission && Capacitor.isNativePlatform()) {
+      // Small delay to ensure UI renders first
+      setTimeout(() => {
+        if (isMounted) handlePickRealContacts();
+      }, 300);
+    }
+    return () => { isMounted = false; };
+  }, []);
+
   // Filter contacts based on search query
   const filteredContacts = useMemo(() => {
     if (!searchQuery.trim()) return contacts;

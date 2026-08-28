@@ -33,6 +33,11 @@ jobs:
 
       - name: Build React App & Sync Capacitor Android
         run: |
+          mkdir -p assets
+          cp public/ic_app_logo.png assets/icon.png
+          npm install @capacitor/assets --no-save --legacy-peer-deps
+          npx @capacitor/assets generate --android
+
           npm run build
           node ./node_modules/@capacitor/cli/bin/capacitor sync android
 

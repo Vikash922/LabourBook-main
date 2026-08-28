@@ -70,21 +70,8 @@ export const LaborReportScreen: React.FC<LaborReportScreenProps> = ({ workerId }
   };
 
   const handleWhatsAppShare = async () => {
-    const text = generateWorkerReportText(worker, selectedMonth, stats);
-    const shared = await universalShare({
-      title: `${worker.name} - Attendance & Wage Report`,
-      text: text,
-      dialogTitle: `Share Report for ${worker.name}`
-    });
-    if (!shared) {
-      await copyToClipboard(text);
-      showToast('Report copied to clipboard!');
-      const cleanPhone = (worker.phoneNumber || '').replace(/\D/g, '');
-      const url = cleanPhone
-        ? `https://wa.me/${cleanPhone}?text=${encodeURIComponent(text)}`
-        : `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
-      window.open(url, '_blank');
-    }
+    // Sharing PDF directly as requested by user
+    handleSharePdf();
   };
 
   const firstLetter = worker.name.trim().charAt(0).toUpperCase() || '?';
