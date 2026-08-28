@@ -83,13 +83,18 @@ export const AddLaborScreen: React.FC = () => {
     return () => { isMounted = false; };
   }, []);
 
-  // Filter contacts based on search query
+  // Filter and sort contacts based on search query
   const filteredContacts = useMemo(() => {
-    if (!searchQuery.trim()) return contacts;
+    // 1. First sort the contacts alphabetically by name
+    const sorted = [...contacts].sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+    
+    // 2. Then filter them if there is a search query
+    if (!searchQuery.trim()) return sorted;
     const q = searchQuery.toLowerCase().trim();
-    return contacts.filter(
+    
+    return sorted.filter(
       (c) =>
-        c.name.toLowerCase().includes(q) ||
+        (c.name || '').toLowerCase().includes(q) ||
         (c.phone || '').replace(/[^0-9]/g, '').includes(q.replace(/[^0-9]/g, ''))
     );
   }, [contacts, searchQuery]);
@@ -99,7 +104,6 @@ export const AddLaborScreen: React.FC = () => {
     setIsRefreshing(true);
     setTimeout(() => {
       setIsRefreshing(false);
-      showToast('Contacts refreshed');
     }, 500);
   };
 
@@ -107,7 +111,6 @@ export const AddLaborScreen: React.FC = () => {
   const handlePickRealContacts = async () => {
     try {
       if (Capacitor.isNativePlatform()) {
-        showToast('Checking permissions...');
         // Check permissions
         let perm = await Contacts.checkPermissions();
         if (perm.contacts !== 'granted') {
@@ -117,7 +120,6 @@ export const AddLaborScreen: React.FC = () => {
         if (perm.contacts === 'granted') {
           setHasPermission(true);
           setShowPermissionModal(false);
-          showToast('Fetching your contacts, please wait...');
           
           // Fetch ALL contacts to display in the list
           const result = await Contacts.getContacts({
@@ -141,15 +143,11 @@ export const AddLaborScreen: React.FC = () => {
 
             if (imported.length > 0) {
               setContacts(imported); // Replace with phone contacts directly for better UX
-              showToast(`Loaded ${imported.length} contacts from phone`);
             } else {
-              showToast('No phone numbers found in contacts');
             }
           } else {
-            showToast('No contacts found on device');
           }
         } else {
-          showToast('Contact permission denied');
         }
         return;
       }
@@ -176,7 +174,6 @@ export const AddLaborScreen: React.FC = () => {
               return [...newUnique, ...prev];
             });
             setHasPermission(true);
-            showToast(`Loaded ${imported.length} contact(s) from phone`);
             return;
           }
         }
@@ -195,7 +192,6 @@ export const AddLaborScreen: React.FC = () => {
   const handleGrantPermission = () => {
     setShowPermissionModal(false);
     setHasPermission(true);
-    showToast('Permission allowed. Pick real contacts from your phone.');
   };
 
   // Manual Form Submission
