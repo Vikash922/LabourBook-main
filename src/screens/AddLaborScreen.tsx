@@ -13,6 +13,7 @@ import {
 import { useLabor } from '../store/laborStore';
 import { SalaryType } from '../types';
 import { getAvatarBgWithOpacity, AVATAR_PALETTE } from '../utils/avatar';
+import { Capacitor } from '@capacitor/core';
 
 interface DeviceContact {
   id: string;
@@ -89,10 +90,55 @@ export const AddLaborScreen: React.FC = () => {
     }, 500);
   };
 
-  // Real Web Contact Picker API Handler
+  // Native / Web Contact Picker Handler
   const handlePickRealContacts = async () => {
-    if ('contacts' in navigator && 'ContactsManager' in window) {
-      try {
+    try {
+      if (Capacitor.isNativePlatform()) {
+        const { Contacts } = await import('@capacitor-community/contacts');
+        
+        // Check permissions
+        let perm = await Contacts.checkPermissions();
+        if (perm.contacts !== 'granted') {
+          perm = await Contacts.requestPermissions();
+        }
+
+        if (perm.contacts === 'granted') {
+          setHasPermission(true);
+          
+          // Use the built-in native contact picker
+          const result = await Contacts.pickContact({
+            projection: { name: true, phones: true }
+          });
+          
+          if (result && result.contact) {
+            const c = result.contact;
+            const name = c.name?.display || 'Unknown';
+            const phone = c.phones && c.phones.length > 0 ? c.phones[0].number : '';
+            
+            if (name || phone) {
+              const newContact: DeviceContact = {
+                id: `c-native-${Date.now()}`,
+                name,
+                phone: phone || ''
+              };
+              
+              setContacts((prev) => {
+                const exists = prev.some(p => p.phone === newContact.phone && p.name === newContact.name);
+                if (!exists) return [newContact, ...prev];
+                return prev;
+              });
+              
+              showToast(`Added ${name} from phone`);
+            }
+          }
+        } else {
+          showToast('Contact permission denied');
+        }
+        return;
+      }
+
+      // Web Fallback
+      if ('contacts' in navigator && 'ContactsManager' in window) {
         const props = ['name', 'tel'];
         const opts = { multiple: true };
         const selected = await (navigator as any).contacts.select(props, opts);
@@ -117,27 +163,21 @@ export const AddLaborScreen: React.FC = () => {
             return;
           }
         }
-      } catch (err: any) {
-        if (err.name === 'SecurityError' || err.name === 'AbortError') {
-          return;
-        }
+      } else {
+        setShowPermissionModal(true);
+      }
+    } catch (err: any) {
+      if (err.name !== 'SecurityError' && err.name !== 'AbortError' && !err.message?.includes('User canceled')) {
+        console.warn("Contact picker error:", err);
       }
     }
-    
-    // Fallback: If browser does not support navigator.contacts or on non-https/unsupported browser
-    setShowPermissionModal(true);
   };
 
-  // Grant Permission Confirmation Handler
+  // Grant Permission Confirmation Handler (Web only fallback)
   const handleGrantPermission = () => {
     setShowPermissionModal(false);
     setHasPermission(true);
-
-    if ('contacts' in navigator && 'ContactsManager' in window) {
-      handlePickRealContacts();
-    } else {
-      showToast('Permission allowed. Pick real contacts from your phone.');
-    }
+    showToast('Permission allowed. Pick real contacts from your phone.');
   };
 
   // Manual Form Submission

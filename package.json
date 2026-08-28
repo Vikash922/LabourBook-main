@@ -13,6 +13,7 @@
     "deploy": "node ./node_modules/typescript/bin/tsc && node ./node_modules/vite/bin/vite.js build && firebase deploy --only hosting"
   },
   "dependencies": {
+    "@capacitor-community/contacts": "^8.0.0",
     "@capacitor/android": "^8.5.0",
     "@capacitor/app": "^8.1.1",
     "@capacitor/cli": "^8.5.0",

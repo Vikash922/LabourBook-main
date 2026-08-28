@@ -104,13 +104,12 @@ export const HomeScreen: React.FC = () => {
         </div>
       </div>
 
-      {/* 3. Floating Action Button: + ADD LABOUR */}
       <button
         type="button"
         onClick={() => navigateTo({ type: 'ADD_LABOR' })}
-        className="absolute bottom-4 right-4 z-30 flex items-center gap-2 px-4.5 py-3 bg-[#1656D6] hover:bg-blue-700 active:scale-95 text-white font-extrabold text-xs rounded-full shadow-[0_8px_24px_rgba(22,86,214,0.45)] uppercase tracking-wider transition-all duration-150 cursor-pointer"
+        className="absolute bottom-6 right-5 sm:bottom-8 sm:right-6 z-30 flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-[#1656D6] to-[#0A3F9E] hover:from-[#0A3F9E] hover:to-[#1656D6] active:scale-95 text-white font-black text-[13px] sm:text-sm rounded-full shadow-[0_12px_28px_rgba(22,86,214,0.45)] ring-2 ring-white/20 uppercase tracking-widest transition-all duration-300 cursor-pointer"
       >
-        <UserPlus className="w-4 h-4 stroke-[2.5]" />
+        <UserPlus className="w-5 h-5 stroke-[2.5]" />
         <span>ADD LABOUR</span>
       </button>
     </div>
