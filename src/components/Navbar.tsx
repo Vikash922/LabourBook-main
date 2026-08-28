@@ -67,14 +67,11 @@ export const Navbar: React.FC = () => {
             <>
               {/* Left Brand Title with Mini Logo */}
               <div className="flex items-center gap-2.5">
-                <div className="relative">
-                  <div className="absolute inset-0 bg-[#1656D6] rounded-xl blur-[6px] opacity-40"></div>
-                  <img
-                    src="/ic_app_logo.png"
-                    alt="LabourBook"
-                    className="w-9 h-9 rounded-xl object-contain shadow-md relative z-10 ring-2 ring-white"
-                  />
-                </div>
+                <img
+                  src="/ic_app_logo.png"
+                  alt="LabourBook"
+                  className="w-8 h-8 rounded-[10px] object-contain shadow-sm border border-slate-200/50"
+                />
                 <h1 className="text-[22px] font-black tracking-tight leading-none text-transparent bg-clip-text bg-gradient-to-r from-[#1656D6] to-[#0A3F9E]">
                   LabourBook
                 </h1>

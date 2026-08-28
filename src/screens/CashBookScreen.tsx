@@ -163,63 +163,68 @@ export const CashBookScreen: React.FC = () => {
         </div>
       </div>
 
-      {/* 3. Transactions Table (Scrollable container) */}
-      <div className="flex-1 overflow-y-auto overscroll-contain pb-24">
-        <div className="max-w-md md:max-w-xl mx-auto px-4 pt-1">
-          {/* Table Header */}
-          <div className="grid grid-cols-[3.8rem_1fr_6rem] border-t border-b border-slate-200/90 py-2.5 px-3 bg-white text-xs font-bold text-slate-900 select-none">
-            <div>Date</div>
-            <div>Notes</div>
-            <div className="text-left">₹ Amount</div>
+      {/* 3. Sticky Table Header (Black background, fixed outside scroll) */}
+      <div className="flex-shrink-0 border-y border-slate-300 bg-slate-900 text-white shadow-sm z-10">
+        <div className="max-w-md md:max-w-xl mx-auto px-4">
+          <div className="grid grid-cols-[3.8rem_1fr_6rem] py-2.5 items-center text-[11px] uppercase tracking-wider font-extrabold select-none">
+            <div className="border-r border-slate-700 pr-2">Date</div>
+            <div className="border-r border-slate-700 px-3">Notes</div>
+            <div className="pl-3 text-right">₹ Amount</div>
           </div>
+        </div>
+      </div>
 
-          {/* Table Rows */}
+      {/* 4. Transactions Table (Only THIS scrolls) */}
+      <div className="flex-1 overflow-y-auto overscroll-contain pb-24 bg-[#F8F9FB]">
+        <div className="max-w-md md:max-w-xl mx-auto px-4">
           {filteredTransactions.length === 0 ? (
-            <div className="p-8 text-center bg-white space-y-2 border-b border-slate-100">
+            <div className="p-8 text-center bg-white mt-2 rounded-xl shadow-2xs border border-slate-100">
               <p className="text-xs text-slate-400 font-medium">No transactions found for this month.</p>
             </div>
           ) : (
-            <div className="divide-y divide-slate-100 bg-white">
-              {filteredTransactions.map((tx) => {
+            <div className="bg-white border-x border-b border-slate-200 shadow-2xs">
+              {filteredTransactions.map((tx, idx) => {
                 const isCashIn = tx.type === 'CASH_IN';
                 const { day, dayOfWeek } = parseTxDate(tx.fullDate || tx.dateDisplay);
+                const isLast = idx === filteredTransactions.length - 1;
 
                 return (
                   <div
                     key={tx.id}
                     onClick={() => setDetailTransaction(tx)}
-                    className="grid grid-cols-[3.8rem_1fr_6rem] items-center py-3 px-3 hover:bg-slate-50 transition cursor-pointer active:bg-slate-100"
+                    className={`grid grid-cols-[3.8rem_1fr_6rem] items-center py-3.5 px-3 hover:bg-slate-50 transition cursor-pointer active:bg-slate-100 ${
+                      !isLast ? 'border-b border-slate-200' : ''
+                    }`}
                   >
                     {/* Column 1: Date */}
-                    <div>
-                      <span className="text-sm sm:text-base font-bold text-slate-900 block leading-tight">
+                    <div className="border-r border-slate-200 pr-2 h-full flex flex-col justify-center">
+                      <span className="text-sm sm:text-base font-black text-slate-900 block leading-tight">
                         {day}
                       </span>
-                      <span className="text-[11px] font-medium text-slate-400 block leading-tight">
+                      <span className="text-[10px] sm:text-[11px] font-bold text-slate-500 block leading-tight mt-0.5">
                         {dayOfWeek}
                       </span>
                     </div>
 
                     {/* Column 2: Notes & Payment Mode */}
-                    <div className="pr-2">
-                      <span className="text-xs sm:text-sm font-medium text-slate-900 block leading-tight line-clamp-1">
+                    <div className="border-r border-slate-200 px-3 h-full flex flex-col justify-center">
+                      <span className="text-xs sm:text-sm font-bold text-slate-900 block leading-tight line-clamp-1">
                         {tx.notes || (isCashIn ? 'Cash In' : 'Expense')}
                       </span>
-                      <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider block leading-tight mt-0.5">
-                        {tx.paymentMethod === 'ONLINE' ? 'UPI' : 'CASH'}
+                      <span className="text-[10px] font-bold text-slate-500 tracking-wide block leading-tight mt-1">
+                        {tx.paymentMethod === 'ONLINE' ? 'ONLINE/UPI' : 'CASH'}
                       </span>
                     </div>
 
                     {/* Column 3: Amount & Chevron */}
-                    <div className="flex items-center justify-between">
+                    <div className="pl-3 h-full flex flex-col items-end justify-center">
                       <span
-                        className={`text-sm sm:text-base font-bold ${
+                        className={`text-sm sm:text-base font-black ${
                           isCashIn ? 'text-[#10B981]' : 'text-[#EF4444]'
                         }`}
                       >
-                        ₹{tx.amount}
+                        {isCashIn ? '+' : '-'}₹{tx.amount}
                       </span>
-                      <ChevronRight className="w-4 h-4 text-slate-300 stroke-[2] shrink-0" />
                     </div>
                   </div>
                 );
@@ -229,24 +234,24 @@ export const CashBookScreen: React.FC = () => {
         </div>
       </div>
 
-      {/* 4. Docked Action Bar: ALWAYS VISIBLE ABOVE BOTTOM NAV WITHOUT SCROLLING */}
-      <div className="absolute bottom-2 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-slate-200/90 px-4 py-2.5 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
+      {/* 5. Docked Action Bar: ALWAYS VISIBLE ABOVE BOTTOM NAV WITHOUT SCROLLING */}
+      <div className="absolute bottom-2 left-0 right-0 z-30 px-4">
         <div className="max-w-md md:max-w-xl mx-auto flex items-center gap-3">
           <button
             type="button"
             onClick={() => setActiveModalType('CASH_IN')}
-            className="flex-1 py-3 bg-[#28A76B] hover:bg-emerald-700 active:scale-95 text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-md shadow-[#28A76B]/25 flex items-center justify-center gap-1.5 cursor-pointer transition uppercase tracking-wider"
+            className="flex-1 py-4 bg-gradient-to-r from-[#28A76B] to-[#1F8C58] hover:from-[#1F8C58] hover:to-[#28A76B] active:scale-95 text-white font-black text-[13px] sm:text-base rounded-2xl shadow-[0_12px_28px_rgba(40,167,107,0.45)] ring-2 ring-white/20 flex items-center justify-center gap-2 cursor-pointer transition uppercase tracking-widest"
           >
-            <Plus className="w-4 h-4 stroke-[3]" />
+            <Plus className="w-5 h-5 stroke-[3]" />
             <span>CASH IN</span>
           </button>
 
           <button
             type="button"
             onClick={() => setActiveModalType('CASH_OUT')}
-            className="flex-1 py-3 bg-[#E02D3C] hover:bg-red-700 active:scale-95 text-white font-extrabold text-xs sm:text-sm rounded-xl shadow-md shadow-[#E02D3C]/25 flex items-center justify-center gap-1.5 cursor-pointer transition uppercase tracking-wider"
+            className="flex-1 py-4 bg-gradient-to-r from-[#E02D3C] to-[#B91C2A] hover:from-[#B91C2A] hover:to-[#E02D3C] active:scale-95 text-white font-black text-[13px] sm:text-base rounded-2xl shadow-[0_12px_28px_rgba(224,45,60,0.45)] ring-2 ring-white/20 flex items-center justify-center gap-2 cursor-pointer transition uppercase tracking-widest"
           >
-            <Minus className="w-4 h-4 stroke-[3]" />
+            <Minus className="w-5 h-5 stroke-[3]" />
             <span>CASH OUT</span>
           </button>
         </div>

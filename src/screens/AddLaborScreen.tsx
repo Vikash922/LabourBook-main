@@ -104,32 +104,36 @@ export const AddLaborScreen: React.FC = () => {
 
         if (perm.contacts === 'granted') {
           setHasPermission(true);
+          showToast('Fetching contacts...');
           
-          // Use the built-in native contact picker
-          const result = await Contacts.pickContact({
+          // Fetch ALL contacts to display in the list
+          const result = await Contacts.getContacts({
             projection: { name: true, phones: true }
           });
           
-          if (result && result.contact) {
-            const c = result.contact;
-            const name = c.name?.display || 'Unknown';
-            const phone = c.phones && c.phones.length > 0 ? c.phones[0].number : '';
+          if (result && result.contacts && result.contacts.length > 0) {
+            const imported: DeviceContact[] = [];
             
-            if (name || phone) {
-              const newContact: DeviceContact = {
-                id: `c-native-${Date.now()}`,
-                name,
-                phone: phone || ''
-              };
-              
-              setContacts((prev) => {
-                const exists = prev.some(p => p.phone === newContact.phone && p.name === newContact.name);
-                if (!exists) return [newContact, ...prev];
-                return prev;
-              });
-              
-              showToast(`Added ${name} from phone`);
+            result.contacts.forEach((c) => {
+              const name = c.name?.display;
+              const phone = c.phones && c.phones.length > 0 ? c.phones[0].number : '';
+              if (name && phone) {
+                imported.push({
+                  id: `c-native-${c.contactId || Date.now()}-${Math.random()}`,
+                  name,
+                  phone
+                });
+              }
+            });
+
+            if (imported.length > 0) {
+              setContacts(imported); // Replace with phone contacts directly for better UX
+              showToast(`Loaded ${imported.length} contacts from phone`);
+            } else {
+              showToast('No phone numbers found in contacts');
             }
+          } else {
+            showToast('No contacts found on device');
           }
         } else {
           showToast('Contact permission denied');

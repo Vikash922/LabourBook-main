@@ -24,103 +24,19 @@ export const CustomToast: React.FC<CustomToastProps> = ({ message, onDismiss }) 
 
   if (!message) return null;
 
-  const msgLower = message.toLowerCase();
-
-  // Determine type & icon based on message content
-  let type: 'success' | 'danger' | 'cloud' | 'warning' | 'info' = 'info';
-
-  if (
-    msgLower.includes('delete') ||
-    msgLower.includes('remove') ||
-    msgLower.includes('हटा') ||
-    msgLower.includes('रद्द')
-  ) {
-    type = 'danger';
-  } else if (
-    msgLower.includes('cloud') ||
-    msgLower.includes('sync') ||
-    msgLower.includes('backup') ||
-    msgLower.includes('सिंक') ||
-    msgLower.includes('बैकअप')
-  ) {
-    type = 'cloud';
-  } else if (
-    msgLower.includes('error') ||
-    msgLower.includes('fail') ||
-    msgLower.includes('invalid') ||
-    msgLower.includes('अमान्य') ||
-    msgLower.includes('गलत')
-  ) {
-    type = 'warning';
-  } else if (
-    msgLower.includes('success') ||
-    msgLower.includes('add') ||
-    msgLower.includes('save') ||
-    msgLower.includes('update') ||
-    msgLower.includes('download') ||
-    msgLower.includes('restore') ||
-    msgLower.includes('सफल') ||
-    msgLower.includes('सहेज') ||
-    msgLower.includes('जोड़ा')
-  ) {
-    type = 'success';
   }
 
-  const getIcon = () => {
-    switch (type) {
-      case 'success':
-        return (
-          <div className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
-            <CheckCircle2 className="w-3.5 h-3.5 stroke-[2.5]" />
-          </div>
-        );
-      case 'danger':
-        return (
-          <div className="w-5 h-5 rounded-full bg-rose-500/20 text-rose-400 flex items-center justify-center shrink-0">
-            <Trash2 className="w-3 h-3 stroke-[2.5]" />
-          </div>
-        );
-      case 'cloud':
-        return (
-          <div className="w-5 h-5 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center shrink-0">
-            <Cloud className="w-3 h-3 stroke-[2.5]" />
-          </div>
-        );
-      case 'warning':
-        return (
-          <div className="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
-            <AlertCircle className="w-3 h-3 stroke-[2.5]" />
-          </div>
-        );
-      default:
-        return (
-          <div className="w-5 h-5 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center shrink-0">
-            <Sparkles className="w-3 h-3 stroke-[2.5]" />
-          </div>
-        );
-    }
   };
 
   return (
     <div
       role="status"
       aria-live="polite"
-      className="fixed bottom-[calc(5rem+env(safe-area-inset-bottom,0px))] left-1/2 -translate-x-1/2 z-[9990] px-4 py-2.5 bg-slate-900/95 backdrop-blur-2xl text-white text-xs font-semibold rounded-full shadow-2xl shadow-slate-950/40 border border-white/15 flex items-center gap-2.5 max-w-[90vw] sm:max-w-md animate-in slide-in-from-bottom-5 fade-in zoom-in-95 duration-250 select-none pointer-events-auto"
+      className="fixed bottom-20 left-1/2 -translate-x-1/2 z-[9990] px-5 py-2.5 bg-[#424242] text-white text-[13px] font-normal rounded-full shadow-md max-w-[85vw] animate-in fade-in slide-in-from-bottom-2 duration-200 select-none pointer-events-none"
     >
-      {getIcon()}
-
-      <span className="flex-1 text-slate-100 font-medium text-[12.5px] leading-tight truncate">
+      <span className="tracking-wide text-center block">
         {message}
       </span>
-
-      <button
-        type="button"
-        onClick={onDismiss}
-        className="w-4 h-4 rounded-full hover:bg-white/20 text-slate-400 hover:text-white flex items-center justify-center transition cursor-pointer shrink-0 ml-1"
-        aria-label="Dismiss notification"
-      >
-        <X className="w-3 h-3" />
-      </button>
     </div>
   );
 };

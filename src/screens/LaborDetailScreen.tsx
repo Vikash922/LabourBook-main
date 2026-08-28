@@ -514,20 +514,17 @@ export const LaborDetailScreen: React.FC<LaborDetailScreenProps> = ({ workerId }
 
       </main>
 
-      {/* 6. Docked Action Bar: Share to Worker on WhatsApp */}
-      <div className="absolute bottom-4 left-0 right-0 z-30 px-4 pointer-events-none">
-        <div className="max-w-md md:max-w-xl mx-auto">
-          <button
-            onClick={handleShareSlip}
-            className="w-full flex items-center justify-center gap-2.5 py-4 bg-gradient-to-r from-[#25D366] to-[#1DA851] hover:from-[#1DA851] hover:to-[#25D366] active:scale-95 text-white font-extrabold text-sm sm:text-base rounded-2xl shadow-[0_12px_28px_rgba(37,211,102,0.45)] ring-2 ring-white/20 transition-all duration-300 cursor-pointer pointer-events-auto uppercase tracking-wide"
-          >
-            <svg className="w-5 h-5 sm:w-6 sm:h-6 fill-white shrink-0" viewBox="0 0 24 24">
-              <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-5.46-4.45-9.92-9.91-9.92zm5.79 13.99c-.24.67-1.4 1.28-1.95 1.33-.51.05-1.18.07-3.87-1.04-3.27-1.34-5.38-4.66-5.54-4.88-.16-.22-1.33-1.78-1.33-3.39 0-1.61.85-2.4 1.15-2.73.3-.33.65-.41.87-.41.22 0 .43 0 .62.01.2.01.47-.08.73.55.27.65.92 2.25 1 2.41.08.16.13.36.03.57-.1.22-.16.36-.31.54-.16.18-.34.4-.48.54-.16.16-.33.33-.14.65.19.33.84 1.39 1.8 2.24 1.23 1.1 2.27 1.44 2.59 1.6.33.16.52.14.71-.08.2-.22.85-.99 1.08-1.33.22-.34.45-.29.75-.18.3.11 1.9.9 2.23 1.06.33.16.55.24.63.38.08.14.08.82-.16 1.49z"/>
-            </svg>
-            <span>SHARE TO {firstName.toUpperCase()}</span>
-          </button>
-        </div>
-      </div>
+      {/* 6. Floating Action Button: Share to Worker on WhatsApp */}
+      <button
+        onClick={handleShareSlip}
+        className="absolute bottom-6 right-5 sm:bottom-8 sm:right-6 z-30 flex items-center justify-center gap-2 px-5 py-3.5 bg-gradient-to-r from-[#25D366] to-[#1DA851] hover:from-[#1DA851] hover:to-[#25D366] active:scale-95 text-white font-extrabold text-[13px] sm:text-sm rounded-full shadow-[0_12px_28px_rgba(37,211,102,0.45)] ring-2 ring-white/20 uppercase tracking-widest transition-all duration-300 cursor-pointer"
+        title={`Share to ${firstName}`}
+      >
+        <svg className="w-5 h-5 fill-white shrink-0" viewBox="0 0 24 24">
+          <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-5.46-4.45-9.92-9.91-9.92zm5.79 13.99c-.24.67-1.4 1.28-1.95 1.33-.51.05-1.18.07-3.87-1.04-3.27-1.34-5.38-4.66-5.54-4.88-.16-.22-1.33-1.78-1.33-3.39 0-1.61.85-2.4 1.15-2.73.3-.33.65-.41.87-.41.22 0 .43 0 .62.01.2.01.47-.08.73.55.27.65.92 2.25 1 2.41.08.16.13.36.03.57-.1.22-.16.36-.31.54-.16.18-.34.4-.48.54-.16.16-.33.33-.14.65.19.33.84 1.39 1.8 2.24 1.23 1.1 2.27 1.44 2.59 1.6.33.16.52.14.71-.08.2-.22.85-.99 1.08-1.33.22-.34.45-.29.75-.18.3.11 1.9.9 2.23 1.06.33.16.55.24.63.38.08.14.08.82-.16 1.49z"/>
+        </svg>
+        <span>SHARE</span>
+      </button>
 
       {/* 7. Month Selector Modal */}
       {showMonthModal && (
