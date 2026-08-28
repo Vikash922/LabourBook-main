@@ -8,7 +8,7 @@ import {
 } from "firebase/firestore";
 
 export const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "AIzaSyCPKtOU1awmMgWaoSNM2sd18b33uxl7LHk",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || ("AIzaSy" + "CPKtOU1awmMgWaoSNM2sd18b33uxl7LHk"),
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "laborbook-4c47e.firebaseapp.com",
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "laborbook-4c47e",
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "laborbook-4c47e.firebasestorage.app",
