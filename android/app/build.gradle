@@ -17,6 +17,12 @@ android {
         }
     }
     signingConfigs {
+        release {
+            storeFile file("release.keystore")
+            storePassword "laborbook123"
+            keyAlias "laborbook"
+            keyPassword "laborbook123"
+        }
         debug {
             storeFile file('debug.keystore')
             storePassword 'android'
@@ -25,10 +31,8 @@ android {
         }
     }
     buildTypes {
-        debug {
-            signingConfig signingConfigs.debug
-        }
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

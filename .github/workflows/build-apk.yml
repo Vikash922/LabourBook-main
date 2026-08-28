@@ -46,14 +46,14 @@ jobs:
       - name: Make Gradlew Executable
         run: chmod +x android/gradlew
 
-      - name: Build Debug APK
+      - name: Build Release APK
         run: |
           cd android
-          ./gradlew assembleDebug --no-daemon
+          ./gradlew assembleRelease --no-daemon
 
-      - name: Upload Debug APK
+      - name: Upload Release APK
         uses: actions/upload-artifact@v4
         with:
-          name: LabourBook-Debug-APK
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          name: LabourBook-Release-APK
+          path: android/app/build/outputs/apk/release/app-release.apk
           retention-days: 30
