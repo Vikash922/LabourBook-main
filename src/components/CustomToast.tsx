@@ -1,12 +1,4 @@
 import React, { useEffect } from 'react';
-import {
-  CheckCircle2,
-  Trash2,
-  Cloud,
-  AlertCircle,
-  Sparkles,
-  X
-} from 'lucide-react';
 
 interface CustomToastProps {
   message: string | null;
@@ -24,9 +16,6 @@ export const CustomToast: React.FC<CustomToastProps> = ({ message, onDismiss }) 
 
   if (!message) return null;
 
-  }
-
-  };
 
   return (
     <div
