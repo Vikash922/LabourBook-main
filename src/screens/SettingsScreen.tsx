@@ -22,6 +22,8 @@ import {
   scheduleDailyReminders
 } from '../services/notificationService';
 
+import { flushSyncQueue } from '../services/syncQueue';
+
 export const SettingsScreen: React.FC = () => {
   const {
     userProfile,
@@ -54,9 +56,9 @@ export const SettingsScreen: React.FC = () => {
     setIsLoggingOut(true);
     try {
       if (userProfile.isCloudSyncEnabled) {
-        // Limit full sync to 800ms to prevent long delay since delta syncs happen automatically
+        // Force flush of pending deletes/updates before logout
         await Promise.race([
-          syncToCloudNow(),
+          flushSyncQueue(),
           new Promise(resolve => setTimeout(resolve, 800))
         ]);
       }

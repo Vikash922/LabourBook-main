@@ -761,6 +761,10 @@ export const useLaborStore = create<LaborState>()(
           }
           set({ isSyncing: true });
           try {
+            // Force flush any pending deletes FIRST so they are removed from Firebase
+            const { flushSyncQueue } = await import('../services/syncQueue');
+            await flushSyncQueue();
+
             const syncTime = await syncAllToCloud(
               state.firebaseUid,
               state.workers,

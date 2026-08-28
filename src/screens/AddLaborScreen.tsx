@@ -427,25 +427,25 @@ export const AddLaborScreen: React.FC = () => {
                   }}
                   className="flex items-center justify-between px-4 py-3 hover:bg-slate-50/70 active:bg-slate-100/70 cursor-pointer transition select-none"
                 >
-                  <div className="flex items-center gap-3 min-w-0">
+                  <div className="flex items-center gap-4 min-w-0">
                     <div
-                      className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-slate-800 text-xs shrink-0"
+                      className="w-12 h-12 rounded-full flex items-center justify-center font-bold text-slate-800 text-lg shrink-0 shadow-2xs"
                       style={{ backgroundColor: avatarBg }}
                     >
                       {initial}
                     </div>
                     <div className="truncate">
-                      <h4 className="font-semibold text-slate-900 text-xs sm:text-sm leading-tight truncate">
+                      <h4 className="font-bold text-slate-900 text-sm sm:text-base leading-tight truncate">
                         {contact.name}
                       </h4>
-                      <p className="text-[11px] text-slate-500 font-normal mt-0.5 tracking-tight">
+                      <p className="text-xs sm:text-sm text-slate-500 font-medium mt-1 tracking-tight">
                         {contact.phone || "No phone number"}
                       </p>
                     </div>
                   </div>
 
                   <div className="shrink-0 pl-2">
-                    <span className="text-[11px] font-bold text-[#1862D6] bg-blue-50 border border-blue-100 px-2.5 py-1 rounded-full">
+                    <span className="text-xs sm:text-sm font-bold text-[#1862D6] bg-blue-50 hover:bg-blue-100 border border-blue-200 px-4 py-1.5 rounded-full transition shadow-xs">
                       + Add
                     </span>
                   </div>

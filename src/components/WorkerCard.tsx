@@ -24,7 +24,7 @@ export const WorkerCard: React.FC<WorkerCardProps> = ({
     >
       {/* 1. Circular Pastel Avatar */}
       <div
-        className="w-13 h-13 sm:w-14 sm:h-14 rounded-full flex items-center justify-center font-bold text-slate-900 text-lg sm:text-xl shrink-0 shadow-2xs"
+        className="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center font-bold text-slate-900 text-lg sm:text-xl shrink-0 shadow-2xs"
         style={{ backgroundColor: avatarBg, color: avatarColor }}
       >
         {initial}
