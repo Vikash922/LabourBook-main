@@ -90,7 +90,7 @@ export const AddLaborScreen: React.FC = () => {
     return contacts.filter(
       (c) =>
         c.name.toLowerCase().includes(q) ||
-        c.phone.replace(/[^0-9]/g, '').includes(q.replace(/[^0-9]/g, ''))
+        (c.phone || '').replace(/[^0-9]/g, '').includes(q.replace(/[^0-9]/g, ''))
     );
   }, [contacts, searchQuery]);
 
@@ -257,38 +257,7 @@ export const AddLaborScreen: React.FC = () => {
       {/* 2. Main Content Container */}
       <main className="flex-1 max-w-md md:max-w-xl mx-auto w-full px-4 pt-3.5 pb-28 space-y-3.5">
         
-        {/* Card 1: Contacts Permission Banner (Hides once permission is granted) */}
-        {!hasPermission && (
-          <div className="bg-[#F0F7FF] border border-[#D0E4FE] rounded-2xl p-4 sm:p-5 shadow-2xs transition-all animate-in fade-in duration-200">
-            <div className="flex items-center gap-2.5">
-              <div className="text-[#1862D6] flex items-center justify-center">
-                <Contact className="w-5 h-5 stroke-[2.2]" />
-              </div>
-              <h2 className="text-[15px] sm:text-base font-bold text-[#1862D6] leading-tight">
-                Contacts Permission Needed
-              </h2>
-            </div>
-
-            <p className="text-xs sm:text-[13px] text-slate-600 font-normal leading-relaxed mt-2">
-              Allow Laborbook to access your device contacts to quickly add laborers without typing their numbers manually.
-            </p>
-
-            <div className="flex gap-2.5 mt-4">
-              <button
-                onClick={handlePickRealContacts}
-                className="flex-1 py-3 px-3 bg-[#1862D6] hover:bg-blue-700 active:scale-98 text-white font-semibold text-xs sm:text-[13px] rounded-2xl text-center shadow-xs transition"
-              >
-                Allow Contact Access
-              </button>
-              <button
-                onClick={handlePickRealContacts}
-                className="flex-1 py-3 px-3 bg-[#333E4E] hover:bg-[#252E3A] active:scale-98 text-white font-semibold text-xs sm:text-[13px] rounded-2xl text-center shadow-xs transition"
-              >
-                Pick from Device Contacts
-              </button>
-            </div>
-          </div>
-        )}
+        {/* Permission Banner removed as per user request (Auto-prompt handles it) */}
 
         {/* Card 2: Add Staff (Non-contact staff info) Accordion Matching Screenshot */}
         <div className="bg-white border border-slate-200/80 rounded-2xl shadow-2xs overflow-hidden transition-all">

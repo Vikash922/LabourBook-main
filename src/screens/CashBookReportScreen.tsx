@@ -186,9 +186,9 @@ _Generated via Laborbook App_`;
         <div className="pt-1">
           {/* Table Header */}
           <div className="w-full">
-            <div className="grid grid-cols-[19%_45%_36%] py-2 items-stretch border-y border-[#000000] bg-white text-[15px] font-black text-black select-none">
-              <div className="border-r border-[#000000] flex items-center justify-center">Date</div>
-              <div className="border-r border-[#000000] px-3 flex items-center">Notes</div>
+            <div className="grid grid-cols-[19%_45%_36%] py-2 items-stretch border-y border-slate-300 bg-white text-[15px] font-black text-black select-none">
+              <div className="border-r border-slate-300 flex items-center justify-center">Date</div>
+              <div className="border-r border-slate-300 px-3 flex items-center">Notes</div>
               <div className="pl-3 flex items-center">₹ Amount</div>
             </div>
           </div>
@@ -199,7 +199,7 @@ _Generated via Laborbook App_`;
               <p className="text-xs text-slate-400 font-medium">No transactions found for this date range.</p>
             </div>
           ) : (
-            <div className="bg-white border-b border-[#000000] w-full">
+            <div className="bg-white border-b border-slate-300 w-full">
               {filtered.map((tx, idx) => {
                 const isCashIn = tx.type === 'CASH_IN';
                 const { day, dayOfWeek } = parseTxDate(tx.fullDate || tx.dateDisplay);
@@ -209,11 +209,11 @@ _Generated via Laborbook App_`;
                   <div
                     key={tx.id}
                     className={`grid grid-cols-[19%_45%_36%] items-stretch hover:bg-slate-50 transition ${
-                      !isLast ? 'border-b border-[#000000]' : ''
+                      !isLast ? 'border-b border-slate-300' : ''
                     }`}
                   >
                     {/* Column 1: Date */}
-                    <div className="border-r border-[#000000] py-1.5 flex flex-col justify-center items-center">
+                    <div className="border-r border-slate-300 py-1.5 flex flex-col justify-center items-center">
                       <span className="text-[17px] font-black text-black block leading-none">
                         {day}
                       </span>
@@ -223,7 +223,7 @@ _Generated via Laborbook App_`;
                     </div>
 
                     {/* Column 2: Notes & Payment Mode */}
-                    <div className="border-r border-[#000000] px-3 py-1.5 flex flex-col justify-center">
+                    <div className="border-r border-slate-300 px-3 py-1.5 flex flex-col justify-center">
                       <span className="text-[15px] text-black font-semibold block leading-none line-clamp-1">
                         {tx.notes || (isCashIn ? 'Cash In' : 'Expense')}
                       </span>
