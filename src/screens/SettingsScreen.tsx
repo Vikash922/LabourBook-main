@@ -81,8 +81,8 @@ export const SettingsScreen: React.FC = () => {
   const handleSaveProfile = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     updateProfile({
-      businessName: businessName.trim() || 'LabourBook Construction',
-      name: contractorName.trim() || 'Contractor',
+      businessName: businessName.trim(),
+      name: contractorName.trim(),
       mobile: mobile.trim()
     });
     setShowEditModal(false);
@@ -123,11 +123,11 @@ export const SettingsScreen: React.FC = () => {
           </div>
           <div className="min-w-0">
             <h2 className="text-base sm:text-lg font-extrabold text-slate-900 truncate leading-tight">
-              {userProfile.businessName || 'LabourBook Construction'}
+              {userProfile.businessName || (lang === 'hi' ? 'व्यापार का नाम जोड़ें' : 'Add Business Name')}
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 font-medium truncate mt-0.5">
               {userProfile.name ? `${userProfile.name} • ` : ''}
-              {userProfile.mobile || '+91 98765 43210'}
+              {userProfile.mobile || (lang === 'hi' ? 'कोई नंबर नहीं' : 'No mobile added')}
             </p>
           </div>
         </div>

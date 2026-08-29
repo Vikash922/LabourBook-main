@@ -16,7 +16,7 @@ import { parseYearMonth } from '../utils/calendar';
 export const CashBookScreen: React.FC = () => {
   const {
     transactions,
-    selectedMonth,
+    cashBookMonth, setCashBookMonth,
     addTransaction,
     updateTransaction,
     deleteTransaction,
@@ -28,14 +28,14 @@ export const CashBookScreen: React.FC = () => {
   const [detailTransaction, setDetailTransaction] = useState<CashTransaction | null>(null);
   const [editingTransaction, setEditingTransaction] = useState<CashTransaction | null>(null);
 
-  const { year, month } = parseYearMonth(selectedMonth);
+  const { year, month } = parseYearMonth(cashBookMonth);
   const monthPrefix = `${year}-${String(month).padStart(2, '0')}`;
 
   // Filter transactions by month and search
   const filteredTransactions = useMemo(() => {
     return transactions.filter((t) => {
       // Month filter
-      if (selectedMonth !== "All Months") {
+      if (cashBookMonth !== "All Months") {
         if (t.fullDate && !t.fullDate.startsWith(monthPrefix)) {
           return false;
         }
@@ -55,7 +55,7 @@ export const CashBookScreen: React.FC = () => {
       }
       return (b.timestamp || 0) - (a.timestamp || 0);
     });
-  }, [transactions, selectedMonth, monthPrefix, search]);
+  }, [transactions, cashBookMonth, setCashBookMonth, monthPrefix, search]);
 
   // Compute Totals
   const { totalIn, totalOut, netBalance } = useMemo(() => {
@@ -277,7 +277,7 @@ export const CashBookScreen: React.FC = () => {
           isOpen={true}
           defaultType={activeModalType || 'CASH_IN'}
           initialTransaction={editingTransaction}
-          selectedMonth={selectedMonth}
+          selectedMonth={cashBookMonth}
           onSave={(amount, type, method, date, notes) => {
             if (editingTransaction) {
               updateTransaction({

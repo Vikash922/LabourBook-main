@@ -6,9 +6,9 @@ import { downloadCashBookReportPdf } from '../utils/pdfGenerator';
 import { universalShare, copyToClipboard } from '../services/nativeBridge';
 
 export const CashBookReportScreen: React.FC = () => {
-  const { transactions, selectedMonth, navigateTo, showToast, userProfile } = useLabor();
+  const { transactions, cashBookMonth, navigateTo, showToast, userProfile } = useLabor();
 
-  const { year, month } = parseYearMonth(selectedMonth);
+  const { year, month } = parseYearMonth(cashBookMonth);
   const lastDayOfMonth = new Date(year, month, 0).getDate();
 
   const [startDate, setStartDate] = useState(getDateKey(year, month, 1));

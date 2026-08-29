@@ -88,6 +88,7 @@ interface LaborState {
 
   // Session-only (not persisted)
   selectedMonth: string;
+  cashBookMonth: string;
   currentScreen: Screen;
   navigationHistory: Screen[];
   modalCloseHandlers: (() => boolean)[];
@@ -102,6 +103,7 @@ interface LaborState {
   goBack: () => boolean;
   pushModalHandler: (handler: () => boolean) => () => void;
   setSelectedMonth: (month: string) => void;
+  setCashBookMonth: (month: string) => void;
   setSearchQuery: (query: string) => void;
   showToast: (msg: string) => void;
   clearToast: () => void;
@@ -438,6 +440,7 @@ export const useLaborStore = create<LaborState>()(
 
         // ── Session State (not persisted) ──
         selectedMonth: formatCurrentMonth(),
+        cashBookMonth: formatCurrentMonth(),
         currentScreen: { type: 'HOME' } as Screen,
         navigationHistory: [] as Screen[],
         modalCloseHandlers: [] as (() => boolean)[],
@@ -499,6 +502,7 @@ export const useLaborStore = create<LaborState>()(
           };
         },
         setSelectedMonth: (month) => set({ selectedMonth: month }),
+        setCashBookMonth: (month) => set({ cashBookMonth: month }),
         setSearchQuery: (query) => set({ searchQuery: query }),
         showToast: (msg) => {
           if (toastTimer) clearTimeout(toastTimer);

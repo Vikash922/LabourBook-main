@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { X, Calendar as CalendarIcon } from 'lucide-react';
 import { CashTransaction, PaymentMethod, TransactionType } from '../types';
-import { getDateKey, getTodayYear, getTodayMonth, getTodayDay, formatDisplayDate } from '../utils/calendar';
+import { getDateKey, getTodayYear, getTodayMonth, getTodayDay, formatDisplayDate, parseYearMonth } from '../utils/calendar';
 import { useLockBodyScroll } from '../utils/scrollLock';
 
 interface TransactionModalProps {
@@ -19,17 +19,30 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
   isOpen,
   initialTransaction,
   defaultType = 'CASH_IN',
-  selectedMonth = 'Aug 2026',
+  selectedMonth,
   onSave,
   onDelete,
   onClose
 }) => {
   const todayStr = getDateKey(getTodayYear(), getTodayMonth(), getTodayDay());
+  
+  // Calculate default date based on selectedMonth
+  let initialDate = todayStr;
+  if (!initialTransaction && selectedMonth && selectedMonth !== 'All Months') {
+    const { year, month } = parseYearMonth(selectedMonth);
+    const todayYear = getTodayYear();
+    const todayMonth = getTodayMonth();
+    
+    // If selected month is not current month, default to 1st of that month
+    if (year !== todayYear || month !== todayMonth) {
+      initialDate = getDateKey(year, month, 1);
+    }
+  }
 
   const [type, setType] = useState<TransactionType>(initialTransaction?.type || defaultType);
   const [amountStr, setAmountStr] = useState<string>(initialTransaction ? String(initialTransaction.amount) : '');
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(initialTransaction?.paymentMethod || 'CASH');
-  const [date, setDate] = useState<string>(initialTransaction?.fullDate || todayStr);
+  const [date, setDate] = useState<string>(initialTransaction?.fullDate || initialDate);
   const [notes, setNotes] = useState<string>(initialTransaction?.notes || '');
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
 
