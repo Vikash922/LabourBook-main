@@ -125,7 +125,7 @@ export const LaborDetailScreen: React.FC<LaborDetailScreenProps> = ({ workerId }
           <div className="flex items-center gap-2">
             <button
               onClick={() => setShowEditWorkerModal(true)}
-              className="flex items-center gap-1 px-3 py-1.5 bg-white hover:bg-slate-50 border border-slate-300 rounded-lg text-xs font-bold text-slate-900 shadow-2xs active:scale-95 transition cursor-pointer"
+              className="flex items-center gap-1 px-3 py-1.5 bg-white hover:bg-slate-50 border border-slate-300 rounded-lg text-[13px] sm:text-sm font-bold text-slate-900 shadow-2xs active:scale-95 transition cursor-pointer"
             >
               <Edit2 className="w-3.5 h-3.5 stroke-[2]" />
               <span>Edit</span>
@@ -147,13 +147,13 @@ export const LaborDetailScreen: React.FC<LaborDetailScreenProps> = ({ workerId }
         <div className="max-w-md md:max-w-xl mx-auto px-4 pt-3 space-y-2.5">
         {/* 2. Overview Row: Title + Month Selector Button */}
         <div className="flex items-center justify-between">
-          <span className="text-xs font-bold text-slate-500">
+          <span className="text-[13px] sm:text-sm font-bold text-slate-500">
             Overview
           </span>
 
           <button
             onClick={() => setShowMonthModal(true)}
-            className="flex items-center gap-1.5 px-2.5 py-1 bg-white hover:bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 shadow-2xs hover:shadow-xs transition active:scale-95 cursor-pointer"
+            className="flex items-center gap-1.5 px-2.5 py-1 bg-white hover:bg-slate-50 border border-slate-300 rounded-xl text-[13px] sm:text-sm font-bold text-slate-900 shadow-2xs hover:shadow-xs transition active:scale-95 cursor-pointer"
           >
             <CalendarIcon className="w-3.5 h-3.5 text-slate-900 stroke-[2]" />
             <span>{selectedMonth}</span>
@@ -170,40 +170,40 @@ export const LaborDetailScreen: React.FC<LaborDetailScreenProps> = ({ workerId }
             <div className="grid grid-cols-4 gap-1 flex-1 text-center">
               {/* Total Present */}
               <div className="py-0.5">
-                <span className="text-sm sm:text-base font-bold text-[#10B981] block leading-tight">
+                <span className="text-[15px] sm:text-[17px] font-black text-[#10B981] block leading-tight">
                   {stats.presentCount.toFixed(1)}
                 </span>
-                <span className="text-[10px] text-slate-500 font-medium mt-0.5 block leading-tight">
+                <span className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5 block leading-tight">
                   Total Present
                 </span>
               </div>
 
               {/* Total Absent */}
               <div className="py-0.5">
-                <span className="text-sm sm:text-base font-bold text-[#EF4444] block leading-tight">
+                <span className="text-[15px] sm:text-[17px] font-black text-[#EF4444] block leading-tight">
                   {stats.absentCount.toFixed(1)}
                 </span>
-                <span className="text-[10px] text-slate-500 font-medium mt-0.5 block leading-tight">
+                <span className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5 block leading-tight">
                   Total Absent
                 </span>
               </div>
 
               {/* Over time */}
               <div className="py-0.5">
-                <span className="text-sm sm:text-base font-bold text-slate-900 block leading-tight">
+                <span className="text-[15px] sm:text-[17px] font-bold text-slate-900 block leading-tight">
                   {stats.overtimeHours}h
                 </span>
-                <span className="text-[10px] text-slate-500 font-medium mt-0.5 block leading-tight">
+                <span className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5 block leading-tight">
                   Over time
                 </span>
               </div>
 
               {/* Total Advance */}
               <div className="py-0.5">
-                <span className="text-sm sm:text-base font-bold text-slate-900 block leading-tight">
+                <span className="text-[15px] sm:text-[17px] font-bold text-slate-900 block leading-tight">
                   ₹{stats.totalAdvance.toFixed(1)}
                 </span>
-                <span className="text-[10px] text-slate-500 font-medium mt-0.5 block leading-tight">
+                <span className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5 block leading-tight">
                   Total Advance
                 </span>
               </div>
@@ -238,30 +238,30 @@ export const LaborDetailScreen: React.FC<LaborDetailScreenProps> = ({ workerId }
             <div className="grid grid-cols-4 gap-1 text-center">
               {/* Half day */}
               <div className="py-0.5">
-                <span className="text-sm sm:text-base font-bold text-slate-900 block leading-tight">
+                <span className="text-[15px] sm:text-[17px] font-bold text-slate-900 block leading-tight">
                   {stats.halfDayCount.toFixed(1)}
                 </span>
-                <span className="text-[10px] text-slate-500 font-medium mt-0.5 block leading-tight">
+                <span className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5 block leading-tight">
                   Half day
                 </span>
               </div>
 
               {/* Total P+P */}
               <div className="py-0.5">
-                <span className="text-sm sm:text-base font-bold text-slate-900 block leading-tight">
+                <span className="text-[15px] sm:text-[17px] font-bold text-slate-900 block leading-tight">
                   {stats.doubleCount.toFixed(1)}
                 </span>
-                <span className="text-[10px] text-slate-500 font-medium mt-0.5 block leading-tight">
+                <span className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5 block leading-tight">
                   Total P+P
                 </span>
               </div>
 
               {/* Total P+1/2 */}
               <div className="py-0.5">
-                <span className="text-sm sm:text-base font-bold text-slate-900 block leading-tight">
+                <span className="text-[15px] sm:text-[17px] font-bold text-slate-900 block leading-tight">
                   {stats.presentHalfCount.toFixed(1)}
                 </span>
-                <span className="text-[10px] text-slate-500 font-medium mt-0.5 block leading-tight">
+                <span className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5 block leading-tight">
                   Total P+1/2
                 </span>
               </div>
@@ -286,7 +286,7 @@ export const LaborDetailScreen: React.FC<LaborDetailScreenProps> = ({ workerId }
                     />
                   </button>
                 </div>
-                <span className="text-[10px] text-slate-500 font-medium mt-0.5 block leading-tight">
+                <span className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5 block leading-tight">
                   Balance
                 </span>
               </div>
@@ -306,7 +306,7 @@ export const LaborDetailScreen: React.FC<LaborDetailScreenProps> = ({ workerId }
 
       {/* 5. Table Header Matching Screenshot */}
       <div className="max-w-md md:max-w-xl mx-auto pt-1">
-        <div className="grid grid-cols-[3.2rem_8.5rem_1fr] sm:grid-cols-[3.75rem_10.5rem_1fr] border-b border-t border-slate-200 text-xs font-bold text-slate-900 items-center bg-white">
+        <div className="grid grid-cols-[3.2rem_8.5rem_1fr] sm:grid-cols-[3.75rem_10.5rem_1fr] border-b border-t border-slate-200 text-[13px] sm:text-sm font-bold text-slate-900 items-center bg-white">
           <div className="py-2.5 border-r border-slate-200 text-center">Date</div>
           <div className="py-2.5 border-r border-slate-200 text-left pl-2.5 sm:pl-3">Attendance</div>
           <div className="py-2.5 text-left pl-2.5 sm:pl-3">₹ / Notes</div>
@@ -357,7 +357,7 @@ export const LaborDetailScreen: React.FC<LaborDetailScreenProps> = ({ workerId }
                         <button
                           type="button"
                           onClick={() => setAttendance(worker.id, day.dayNumber, 'ABSENT', selectedMonth)}
-                          className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg border border-red-400 text-red-500 bg-white hover:bg-red-50 flex items-center justify-center text-[13px] font-bold shadow-2xs cursor-pointer"
+                          className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-[1.5px] border-red-500 text-red-600 bg-white hover:bg-red-50 flex items-center justify-center text-[14px] sm:text-[15px] font-black shadow-2xs cursor-pointer"
                           title="Mark Absent"
                         >
                           A
@@ -367,7 +367,7 @@ export const LaborDetailScreen: React.FC<LaborDetailScreenProps> = ({ workerId }
                         <button
                           type="button"
                           onClick={() => setAttendance(worker.id, day.dayNumber, 'PRESENT', selectedMonth)}
-                          className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg border border-emerald-400 text-emerald-600 bg-white hover:bg-emerald-50 flex items-center justify-center text-[13px] font-bold shadow-2xs cursor-pointer"
+                          className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-[1.5px] border-emerald-500 text-emerald-700 bg-white hover:bg-emerald-50 flex items-center justify-center text-[14px] sm:text-[15px] font-black shadow-2xs cursor-pointer"
                           title="Mark Present"
                         >
                           P
@@ -377,10 +377,10 @@ export const LaborDetailScreen: React.FC<LaborDetailScreenProps> = ({ workerId }
                         <button
                           type="button"
                           onClick={() => setOtDay(day.dayNumber)}
-                          className={`h-7 sm:h-8 px-2 min-w-[32px] rounded-lg border flex items-center justify-center text-xs cursor-pointer ${
+                          className={`h-7 sm:h-8 px-2 min-w-[32px] rounded-lg border flex items-center justify-center text-[13px] sm:text-[14px] font-black cursor-pointer ${
                             hasOT
                               ? 'bg-purple-600 text-white border-purple-600 font-bold shadow-2xs'
-                              : 'border-purple-400 text-purple-600 bg-white hover:bg-purple-50 font-bold shadow-2xs'
+                              : 'border-[1.5px] border-purple-500 text-purple-700 bg-white hover:bg-purple-50 font-bold shadow-2xs'
                           }`}
                           title="Overtime"
                         >
@@ -393,7 +393,7 @@ export const LaborDetailScreen: React.FC<LaborDetailScreenProps> = ({ workerId }
                           <button
                             type="button"
                             onClick={() => setSheetDay(day.dayNumber)}
-                            className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-red-500 text-white font-bold text-[13px] flex items-center justify-center shadow-2xs cursor-pointer"
+                            className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-red-500 text-white font-black text-[14px] sm:text-[15px] flex items-center justify-center shadow-2xs cursor-pointer"
                             title="Absent - Tap to edit"
                           >
                             A
@@ -404,7 +404,7 @@ export const LaborDetailScreen: React.FC<LaborDetailScreenProps> = ({ workerId }
                           <button
                             type="button"
                             onClick={() => setSheetDay(day.dayNumber)}
-                            className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-emerald-500 text-white font-bold text-[13px] flex items-center justify-center shadow-2xs cursor-pointer"
+                            className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-emerald-500 text-white font-black text-[14px] sm:text-[15px] flex items-center justify-center shadow-2xs cursor-pointer"
                             title="Present - Tap to edit"
                           >
                             P
@@ -459,10 +459,10 @@ export const LaborDetailScreen: React.FC<LaborDetailScreenProps> = ({ workerId }
                         <button
                           type="button"
                           onClick={() => setOtDay(day.dayNumber)}
-                          className={`h-7 sm:h-8 px-2 min-w-[32px] rounded-lg border flex items-center justify-center text-xs cursor-pointer ${
+                          className={`h-7 sm:h-8 px-2 min-w-[32px] rounded-lg border flex items-center justify-center text-[13px] sm:text-[14px] font-black cursor-pointer ${
                             hasOT
                               ? 'bg-purple-600 text-white border-purple-600 font-bold shadow-2xs'
-                              : 'border-purple-400 text-purple-600 bg-white hover:bg-purple-50 font-bold shadow-2xs'
+                              : 'border-[1.5px] border-purple-500 text-purple-700 bg-white hover:bg-purple-50 font-bold shadow-2xs'
                           }`}
                           title="Overtime"
                         >
