@@ -52,10 +52,10 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
     setType(initialTransaction?.type || defaultType);
     setAmountStr(initialTransaction ? String(initialTransaction.amount) : '');
     setPaymentMethod(initialTransaction?.paymentMethod || 'CASH');
-    setDate(initialTransaction?.fullDate || todayStr);
+    setDate(initialTransaction?.fullDate || initialDate);
     setNotes(initialTransaction?.notes || '');
     setShowDatePicker(false);
-  }, [initialTransaction, defaultType, todayStr, isOpen]);
+  }, [initialTransaction, defaultType, initialDate, isOpen]);
 
   if (!isOpen) return null;
 

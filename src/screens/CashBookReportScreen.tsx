@@ -11,8 +11,11 @@ export const CashBookReportScreen: React.FC = () => {
   const { year, month } = parseYearMonth(cashBookMonth);
   const lastDayOfMonth = new Date(year, month, 0).getDate();
 
-  const [startDate, setStartDate] = useState(getDateKey(year, month, 1));
-  const [endDate, setEndDate] = useState(getDateKey(year, month, lastDayOfMonth));
+  const initialStart = cashBookMonth === "All Months" ? `${year}-01-01` : getDateKey(year, month, 1);
+  const initialEnd = cashBookMonth === "All Months" ? `${year}-12-31` : getDateKey(year, month, lastDayOfMonth);
+
+  const [startDate, setStartDate] = useState(initialStart);
+  const [endDate, setEndDate] = useState(initialEnd);
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
 

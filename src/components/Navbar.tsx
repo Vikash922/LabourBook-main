@@ -14,6 +14,8 @@ export const Navbar: React.FC = () => {
   const { 
     selectedMonth, 
     setSelectedMonth, 
+    cashBookMonth,
+    setCashBookMonth,
     currentScreen, 
     navigateTo,
     userProfile,
@@ -23,6 +25,10 @@ export const Navbar: React.FC = () => {
   
   const [showMonthModal, setShowMonthModal] = useState(false);
   const lang = userProfile.language || 'en';
+  
+  const isCashBook = currentScreen.type === 'CASH_BOOK';
+  const displayMonth = isCashBook ? cashBookMonth : selectedMonth;
+  const handleSelectMonth = isCashBook ? setCashBookMonth : setSelectedMonth;
 
   if (
     currentScreen.type === 'LABOR_DETAIL' ||
@@ -99,7 +105,7 @@ export const Navbar: React.FC = () => {
                 className="flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm font-bold text-slate-900 shadow-2xs transition active:scale-95 cursor-pointer"
               >
                 <CalendarIcon className="w-4 h-4 text-slate-900 stroke-[2.2]" />
-                <span>{selectedMonth}</span>
+                <span>{displayMonth}</span>
                 <ChevronDown className="w-4 h-4 text-slate-900 stroke-[2.2]" />
               </button>
             </div>
@@ -174,8 +180,8 @@ export const Navbar: React.FC = () => {
 
       <MonthSelectorModal
         isOpen={showMonthModal}
-        selectedMonth={selectedMonth}
-        onSelectMonth={setSelectedMonth}
+        selectedMonth={displayMonth}
+        onSelectMonth={handleSelectMonth}
         onClose={() => setShowMonthModal(false)}
       />
     </>
