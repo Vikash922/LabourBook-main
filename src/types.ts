@@ -21,7 +21,7 @@ export interface AdvanceData {
 }
 
 export type AdvanceConfirmationState = 
-  | { type: "ADDED"; amount: number; workerName: string }
+  | { type: "ADDED"; amount: number; workerName: string; paymentMethod?: "CASH" | "ONLINE" }
   | { type: "REMOVED"; workerName: string }
   | null;
 

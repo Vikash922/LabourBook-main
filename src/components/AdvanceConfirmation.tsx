@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Check, User, Trash2 } from 'lucide-react';
+import { Check, Trash2 } from 'lucide-react';
 import { AdvanceConfirmationState } from '../types';
 import { useLockBodyScroll } from '../utils/scrollLock';
 
@@ -13,87 +13,126 @@ export const AdvanceConfirmation: React.FC<AdvanceConfirmationProps> = ({
   confirmation,
   onDismiss
 }) => {
+  const [show, setShow] = useState(false);
+  
   useLockBodyScroll(Boolean(confirmation));
 
-  // Auto dismiss after 2.2 seconds
   useEffect(() => {
-    if (!confirmation) return;
-    const timer = setTimeout(() => {
-      onDismiss();
-    }, 2200);
-    return () => clearTimeout(timer);
-  }, [confirmation, onDismiss]);
+    if (confirmation) {
+      // Delay mounting animation to allow initial render
+      requestAnimationFrame(() => setShow(true));
+      
+      // Auto-dismiss timer (1.8 seconds)
+      const timer = setTimeout(() => {
+        handleClose();
+      }, 1800);
+      
+      // Haptic feedback
+      if (typeof window !== 'undefined' && window.navigator && window.navigator.vibrate) {
+        window.navigator.vibrate(confirmation.type === 'ADDED' ? [50, 50, 50] : 50);
+      }
+      
+      return () => clearTimeout(timer);
+    } else {
+      setShow(false);
+    }
+  }, [confirmation]);
 
-  if (!confirmation) return null;
+  const handleClose = () => {
+    setShow(false);
+    setTimeout(onDismiss, 300); // Wait for exit animation to complete
+  };
 
-  const isAdded = confirmation.type === 'ADDED';
-  const workerName = confirmation.workerName || 'Worker';
+  if (!confirmation && !show) return null;
+
+  const isAdded = confirmation?.type === 'ADDED';
+  const workerName = confirmation?.workerName || 'Worker';
   const amount = isAdded && 'amount' in confirmation ? confirmation.amount : 0;
+  const paymentMethod = isAdded && 'paymentMethod' in confirmation && confirmation.paymentMethod === 'ONLINE' ? 'Online / UPI 📱' : 'Cash 💵';
+
+  const outerBg = isAdded ? 'bg-[#DCFCE7]' : 'bg-[#FEF2F2]';
+  const innerBg = isAdded ? 'bg-[#10B981]' : 'bg-[#EF4444]';
 
   const modalContent = (
-    <div
-      className="fixed inset-0 z-[9995] flex items-center justify-center bg-slate-900/40 backdrop-blur-xs select-none p-4 animate-in fade-in duration-150"
-      onClick={onDismiss}
+    <div 
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 px-5"
+      style={{ WebkitTapHighlightColor: 'transparent' }}
     >
-      <div
-        className="w-full max-w-xs bg-white rounded-3xl p-6 shadow-2xl border border-slate-100 flex flex-col items-center text-center space-y-4 animate-in zoom-in-95 duration-200"
+      {/* Backdrop */}
+      <div 
+        className={`absolute inset-0 bg-[#000000] transition-opacity duration-300 ease-out ${
+          show ? 'opacity-45' : 'opacity-0'
+        }`} 
+        onClick={handleClose} 
+      />
+      
+      {/* Card */}
+      <div 
+        className={`relative w-full max-w-[340px] md:max-w-[380px] bg-white rounded-[24px] shadow-[0_12px_40px_rgba(0,0,0,0.15)] p-6 flex flex-col items-center
+          transition-all duration-[350ms]
+          ${show ? 'scale-100 opacity-100 translate-y-0' : 'scale-[0.6] opacity-0 translate-y-4'}
+        `}
+        style={{
+          transitionTimingFunction: show ? 'cubic-bezier(0.34, 1.56, 0.64, 1)' : 'cubic-bezier(0.4, 0, 1, 1)'
+        }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Compact Glowing Success/Delete Icon */}
-        <div
-          className={`w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg transition-transform ${
-            isAdded
-              ? 'bg-gradient-to-br from-emerald-500 to-green-600 text-white shadow-emerald-500/25'
-              : 'bg-gradient-to-br from-red-500 to-rose-600 text-white shadow-red-500/25'
-          }`}
-        >
-          {isAdded ? (
-            <Check className="w-8 h-8 stroke-[3]" />
-          ) : (
-            <Trash2 className="w-7 h-7 stroke-[2.5]" />
-          )}
+        {/* Animated Central Icon Badge */}
+        <div className={`w-[80px] h-[80px] rounded-full flex items-center justify-center ${outerBg} mb-[18px]`}>
+          <div className={`w-[56px] h-[56px] rounded-full flex items-center justify-center ${innerBg} shadow-inner
+            transition-transform duration-500 delay-100
+            ${show ? 'scale-100' : 'scale-50'}
+          `}
+          style={{ transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)' }}
+          >
+            {isAdded ? (
+              <Check className="w-8 h-8 text-white stroke-[3]" />
+            ) : (
+              <Trash2 className="w-8 h-8 text-white stroke-[2.5]" />
+            )}
+          </div>
         </div>
 
-        {/* Amount & Status Headline */}
-        <div className="space-y-1">
+        {/* Title */}
+        <h2 className="text-[20px] font-bold text-[#111827] text-center leading-tight mb-1.5">
+          {isAdded ? 'Advance Saved!' : 'Advance Removed'}
+        </h2>
+        
+        {/* Highlight Amount */}
+        {amount > 0 && isAdded && (
+          <div className="text-[26px] font-extrabold text-[#10B981] mb-2 leading-none">
+            ₹{amount % 1 === 0 ? amount.toFixed(0) : amount.toFixed(1)}
+          </div>
+        )}
+        
+        {/* Subtitle / Info */}
+        <p className={`text-[13px] text-[#6B7280] text-center font-medium px-2 leading-relaxed ${isAdded ? 'mb-[22px]' : 'mb-[24px]'}`}>
           {isAdded ? (
             <>
-              <div className="text-2xl font-extrabold text-slate-900 tracking-tight">
-                ₹{Number(amount).toLocaleString('en-IN')}
-              </div>
-              <p className="text-xs font-semibold text-emerald-600 tracking-wide uppercase">
-                Advance Added Successfully
-              </p>
+              Updated for <span className="font-bold text-slate-700">{workerName}</span><br/>
+              <span className="inline-block mt-1.5 px-3 py-1 bg-[#F3F4F6] text-[#4B5563] text-[11px] rounded-full font-semibold">
+                {paymentMethod}
+              </span>
             </>
           ) : (
             <>
-              <div className="text-lg font-bold text-slate-900">
-                Advance Deleted
-              </div>
-              <p className="text-xs font-medium text-slate-500">
-                Entry removed from records
-              </p>
+              Advance has been cleared for <span className="font-bold text-slate-700">{workerName}</span>.
             </>
           )}
-        </div>
-
-        {/* Worker Pill */}
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100/90 text-slate-700 text-xs font-medium max-w-full">
-          <User className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-          <span className="truncate">{workerName}</span>
-        </div>
-
-        {/* Quick Dismiss Button */}
+        </p>
+        
+        {/* Bottom Action Button */}
         <button
           type="button"
-          onClick={onDismiss}
-          className={`w-full py-2.5 rounded-xl font-bold text-xs text-white shadow-sm transition active:scale-98 cursor-pointer ${
-            isAdded
-              ? 'bg-[#1656D6] hover:bg-blue-700'
-              : 'bg-slate-800 hover:bg-slate-900'
-          }`}
+          onClick={handleClose}
+          className={`w-full h-[46px] rounded-[23px] flex items-center justify-center font-bold text-[14px] transition-transform active:scale-95
+            ${isAdded 
+              ? 'bg-[#10B981] hover:bg-emerald-600 text-white shadow-sm' 
+              : 'bg-[#F3F4F6] hover:bg-gray-200 text-[#374151]'
+            }
+          `}
         >
-          {isAdded ? 'Done' : 'OK'}
+          {isAdded ? 'Done' : 'Got It'}
         </button>
       </div>
     </div>

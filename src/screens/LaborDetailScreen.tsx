@@ -600,7 +600,7 @@ export const LaborDetailScreen: React.FC<LaborDetailScreenProps> = ({ workerId }
               setAdvanceConfirmation({
                 type: "ADDED",
                 amount: amt,
-                workerName: worker.name
+                workerName: worker.name, paymentMethod: pMode
               });
             }
           }}
